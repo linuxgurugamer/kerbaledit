@@ -20,10 +20,11 @@ namespace KerbalEdit.ViewModels
     public class KerbalDataObjectViewModel : TreeViewItemViewModel
     {
         private IKerbalDataObject obj;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="KerbalDataObjectViewModel" /> class.
         /// </summary>	
-        public KerbalDataObjectViewModel(string displayName, TreeViewItemViewModel parent, IKerbalDataObject obj) : base(displayName, parent)
+        public KerbalDataObjectViewModel(TreeViewItemViewModel parent, IKerbalDataObject obj) : base(obj.DisplayName, parent)
         {
             this.obj = obj;
         }
@@ -34,12 +35,9 @@ namespace KerbalEdit.ViewModels
                 {
                     if (prop.PropertyType.GetInterfaces().Any(i => i.FullName.Contains("IKerbalDataObject")))
                     {
-                        Children.Add(new KerbalDataObjectViewModel(prop.Name, this, (IKerbalDataObject)prop.GetValue(obj)));
+                        Children.Add(new KerbalDataObjectViewModel(this, (IKerbalDataObject)prop.GetValue(obj)));
                     }
 
-                    
-                    //var interfaces = prop.PropertyType.GetInterfaces().Where(i => i.FullName.Contains("IList"));
-                    // if (prop.PropertyType.GetInterfaces().Any(i => i.FullName.Contains("IList") && i.GetGenericArguments().Any(a => a.GetInterfaces().Any(ai => ai.FullName.Contains("IKerbalDataObject")))))
                     if (prop.PropertyType.IsGenericType && (prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>)))
                     {
                         var val = prop.GetValue(obj);

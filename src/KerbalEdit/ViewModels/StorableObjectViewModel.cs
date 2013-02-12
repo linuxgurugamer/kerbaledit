@@ -37,7 +37,7 @@ namespace KerbalEdit.ViewModels
                 {
                     if (prop.PropertyType.GetInterfaces().Any(i => i.FullName.Contains("IKerbalDataObject")))
                     {
-                        Children.Add(new KerbalDataObjectViewModel(prop.Name, this, (IKerbalDataObject)prop.GetValue(obj)));
+                        Children.Add(new KerbalDataObjectViewModel(this, (IKerbalDataObject)prop.GetValue(obj)));
                     }
 
                     if (prop.PropertyType.IsGenericType && (prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>)))

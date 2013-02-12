@@ -35,7 +35,7 @@ namespace KerbalEdit.ViewModels
             var i = 0;
             while (enumerator.MoveNext())
             {
-                Children.Add(new KerbalDataObjectViewModel("[" + i + "]", this, (IKerbalDataObject)enumerator.Current));
+                Children.Add(new KerbalDataObjectViewModel(this, (IKerbalDataObject)enumerator.Current));
                 i++;
             }
             
