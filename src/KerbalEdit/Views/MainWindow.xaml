@@ -18,7 +18,7 @@
         <TextBox HorizontalAlignment="Left" Height="28" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="999" Text="{Binding Path=InstallPath}"/>
         <Button Content="Load" HorizontalAlignment="Left" Margin="1062,10,0,0" VerticalAlignment="Top" Width="35"/>
         <Button Content="Folder" HorizontalAlignment="Left" Margin="1014,10,0,0" VerticalAlignment="Top" Width="43" Command="{Binding Path=OpenKspInstallFolderCommand}" />
-        <TreeView ItemsSource="{Binding Path=Data.Objects}" HorizontalAlignment="Left" Height="685" Margin="10,43,0,0" VerticalAlignment="Top" Width="931"
+        <TreeView ItemsSource="{Binding Path=Data.Objects}" HorizontalAlignment="Left" Height="685" Margin="10,43,0,0" VerticalAlignment="Top" Width="447"
                   ItemTemplate="{StaticResource storableObjectsTemplate}">
             <TreeView.ItemContainerStyle>
                 <!-- 
@@ -36,5 +36,22 @@
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <DataGrid Name="trainingCrew" Grid.Row="1" Grid.Column="0" Margin="467,335,10,10"
+                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                            AutoGenerateColumns="False" IsSynchronizedWithCurrentItem="True" 
+                            ItemsSource="{Binding Path=Data.UnmappedProperties}" RowHeight="70">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Path=Key, Mode=TwoWay}" MinWidth="150">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Type" Binding="{Binding Path=Value, Mode=TwoWay}" MinWidth="200">
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </Window>

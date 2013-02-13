@@ -19,12 +19,12 @@ namespace KerbalEdit.ViewModels
     public class StorableObjectsViewModel<T> : TreeViewItemViewModel where T : class, IStorable, new()
     {
         private StorableObjects<T> objects;
-
+ 
         /// <summary>
         /// Initializes a new instance of the <see cref="StorableObjectsViewModel{T}" /> class.
         /// </summary>	
-        public StorableObjectsViewModel(StorableObjects<T> objects, string name)
-            : base(name)
+        public StorableObjectsViewModel(StorableObjects<T> objects, string name, ISelectedViewModel parent)
+            : base(name, parent)
         {
             this.objects = objects;
         }
@@ -39,7 +39,10 @@ namespace KerbalEdit.ViewModels
             }
         }
 
-
-        
+        protected override void OnSelectedItemChanged(TreeViewItemViewModel item)
+        {
+            base.OnSelectedItemChanged(item);
+            ((ISelectedViewModel)Parent).SelectedItem = item;
+        }
     }
 }

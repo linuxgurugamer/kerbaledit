@@ -19,13 +19,15 @@ namespace KerbalEdit.ViewModels
     /// <summary>
     /// TODO: Class Summary
     /// </summary>
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : BaseWindowViewModel, INotifyPropertyChanged
     {
         const string PropNameKerbalData = "Data";
         const string PropNameInstallPath = "InstallPath";
+        const string PropNameSelectedItem = "SelectedItem";
 
         private string installPath;
         private KerbalDataViewModel kerbalData;
+        private TreeViewItemViewModel selectedItem;
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -12,36 +12,32 @@ namespace KerbalEdit.ViewModels
     using System.ComponentModel;
     using System.Linq;
     using System.Text;
+using KerbalData;
 
     /// <summary>
     /// Base class for all ViewModel classes displayed by TreeViewItems.  
     /// This acts as an adapter between a raw data object and a TreeViewItem.
     /// </summary>
-    public class TreeViewItemViewModel : INotifyPropertyChanged
-    {
-        #region Data
+    public class TreeViewItemViewModel : IViewModel
+    {   
+        private static readonly TreeViewItemViewModel DummyChild = new TreeViewItemViewModel();
 
-        static readonly TreeViewItemViewModel DummyChild = new TreeViewItemViewModel();
+        private readonly ObservableCollection<TreeViewItemViewModel> children;
+        private readonly IViewModel parent;
+        private IKerbalDataObject obj;
 
-        readonly ObservableCollection<TreeViewItemViewModel> _children;
-        readonly TreeViewItemViewModel _parent;
+        private bool isExpanded, isSelected;
+        private string displayName, toolTip;
 
-        bool _isExpanded;
-        bool _isSelected;
-
-        #endregion // Data
-
-        #region Constructors
-
-        protected TreeViewItemViewModel(string displayName, TreeViewItemViewModel parent = null, bool lazyLoadChildren = true)
+        protected TreeViewItemViewModel(string displayName, IViewModel parent = null, bool lazyLoadChildren = true)
         {
             DisplayName = displayName;
-            _parent = parent;
+            this.parent = parent;
 
-            _children = new ObservableCollection<TreeViewItemViewModel>();
+            children = new ObservableCollection<TreeViewItemViewModel>();
 
             if (lazyLoadChildren)
-                _children.Add(DummyChild);
+                children.Add(DummyChild);
         }
 
         // This is used to create the DummyChild instance.
@@ -49,12 +45,29 @@ namespace KerbalEdit.ViewModels
         {
         }
 
-        #endregion // Constructors
+        public virtual IKerbalDataObject Object
+        {
+            get { return obj; }
+            protected set { obj = value; }
+        }
 
-        #region Presentation Members
+        /*
+        public static TreeViewItemViewModel SelectedItem
+        {
+            get
+            {
+                return selectedItem;
+            }
 
-        private string displayName;
-        private string toolTip;
+            private set
+            {
+                if (selectedItem != value)
+                {
+                    selectedItem = value;
+
+                }
+            }
+        }*/
 
         public string DisplayName
         {
@@ -82,63 +95,59 @@ namespace KerbalEdit.ViewModels
             }
         }
 
-        #region Children
-
-        /// <summary>
-        /// Returns the logical child items of this object.
-        /// </summary>
-        public ObservableCollection<TreeViewItemViewModel> Children
-        {
-            get { return _children; }
-        }
-
-        #endregion // Children
-
-        #region HasLoadedChildren
-
-        /// <summary>
-        /// Returns true if this object's Children have not yet been populated.
-        /// </summary>
-        public bool HasDummyChild
-        {
-            get { return this.Children.Count == 1 && this.Children[0] == DummyChild; }
-        }
-
-        #endregion // HasLoadedChildren
-
-        #region IsExpanded
-
         /// <summary>
         /// Gets/sets whether the TreeViewItem 
         /// associated with this object is expanded.
         /// </summary>
         public bool IsExpanded
         {
-            get { return _isExpanded; }
+            get { return isExpanded; }
             set
             {
-                if (value != _isExpanded)
+                if (value != isExpanded)
                 {
-                    _isExpanded = value;
-                    this.OnPropertyChanged("IsExpanded");
+                    isExpanded = value;
+                    OnPropertyChanged("IsExpanded");
                 }
 
                 // Expand all the way up to the root.
-                if (_isExpanded && _parent != null)
-                    _parent.IsExpanded = true;
+                if (isExpanded && parent != null && parent is TreeViewItemViewModel)
+                {
+                    ((TreeViewItemViewModel)parent).IsExpanded = true;
+                }
 
                 // Lazy load the child items, if necessary.
                 if (this.HasDummyChild)
                 {
-                    this.Children.Remove(DummyChild);
-                    this.LoadChildren();
+                    Children.Remove(DummyChild);
+                    LoadChildren();
                 }
             }
         }
 
-        #endregion // IsExpanded
+        /// <summary>
+        /// Returns true if this object's Children have not yet been populated.
+        /// </summary>
+        public bool HasDummyChild
+        {
+            get { return Children.Count == 1 && Children[0] == DummyChild; }
+        }
 
-        #region IsSelected
+        protected virtual void OnSelectedItemChanged(TreeViewItemViewModel item)
+        {
+            if (TreeParent != null)
+            {
+                TreeParent.OnSelectedItemChanged(item);
+            }
+        }
+
+        /// <summary>
+        /// Returns the logical child items of this object.
+        /// </summary>
+        public ObservableCollection<TreeViewItemViewModel> Children
+        {
+            get { return children; }
+        }
 
         /// <summary>
         /// Gets/sets whether the TreeViewItem 
@@ -146,20 +155,21 @@ namespace KerbalEdit.ViewModels
         /// </summary>
         public bool IsSelected
         {
-            get { return _isSelected; }
+            get { return isSelected; }
             set
             {
-                if (value != _isSelected)
+                if (value != isSelected)
                 {
-                    _isSelected = value;
-                    this.OnPropertyChanged("IsSelected");
+                    isSelected = value;
+                    OnPropertyChanged("IsSelected");
+
+                    if (isSelected)
+                    {
+                        OnSelectedItemChanged(this);
+                    }
                 }
             }
         }
-
-        #endregion // IsSelected
-
-        #region LoadChildren
 
         /// <summary>
         /// Invoked when the child items need to be loaded on demand.
@@ -169,30 +179,22 @@ namespace KerbalEdit.ViewModels
         {
         }
 
-        #endregion // LoadChildren
-
-        #region Parent
-
-        public TreeViewItemViewModel Parent
+        public TreeViewItemViewModel TreeParent
         {
-            get { return _parent; }
+            get { return parent as TreeViewItemViewModel; }
         }
 
-        #endregion // Parent
-
-        #endregion // Presentation Members
-
-        #region INotifyPropertyChanged Members
+        public IViewModel Parent
+        {
+            get { return parent; }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        #endregion // INotifyPropertyChanged Members
     }
-
 }

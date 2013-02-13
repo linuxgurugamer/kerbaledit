@@ -29,6 +29,11 @@ namespace KerbalEdit.ViewModels
             this.objs = objs;
         }
 
+        public ICollection Objects
+        {
+            get { return objs; }
+        }
+
         protected override void LoadChildren()
         {
             var enumerator = objs.GetEnumerator();
