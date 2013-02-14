@@ -18,7 +18,7 @@ using KerbalData;
     /// Base class for all ViewModel classes displayed by TreeViewItems.  
     /// This acts as an adapter between a raw data object and a TreeViewItem.
     /// </summary>
-    public class TreeViewItemViewModel : IViewModel
+    public class TreeViewItemViewModel : IViewModel, INotifyPropertyChanged
     {   
         private static readonly TreeViewItemViewModel DummyChild = new TreeViewItemViewModel();
 
@@ -99,7 +99,7 @@ using KerbalData;
         /// Gets/sets whether the TreeViewItem 
         /// associated with this object is expanded.
         /// </summary>
-        public bool IsExpanded
+        public virtual bool IsExpanded
         {
             get { return isExpanded; }
             set
@@ -125,6 +125,14 @@ using KerbalData;
             }
         }
 
+        protected void RemoveDummyChild()
+        {
+            if (HasDummyChild)
+            {
+                Children.Remove(DummyChild);
+            }
+        }
+
         /// <summary>
         /// Returns true if this object's Children have not yet been populated.
         /// </summary>
@@ -144,7 +152,7 @@ using KerbalData;
         /// <summary>
         /// Returns the logical child items of this object.
         /// </summary>
-        public ObservableCollection<TreeViewItemViewModel> Children
+        public virtual ObservableCollection<TreeViewItemViewModel> Children
         {
             get { return children; }
         }
@@ -153,7 +161,7 @@ using KerbalData;
         /// Gets/sets whether the TreeViewItem 
         /// associated with this object is selected.
         /// </summary>
-        public bool IsSelected
+        public virtual bool IsSelected
         {
             get { return isSelected; }
             set
@@ -191,7 +199,7 @@ using KerbalData;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string propertyName)
+        protected virtual void OnPropertyChanged(string propertyName, object value = null)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));

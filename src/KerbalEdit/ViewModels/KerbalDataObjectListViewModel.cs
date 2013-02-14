@@ -19,6 +19,7 @@ namespace KerbalEdit.ViewModels
     /// </summary>
     public class KerbalDataObjectListViewModel : TreeViewItemViewModel
     {
+        private bool childrenLoaded;
         private ICollection objs;
         /// <summary>
         /// Initializes a new instance of the <see cref="KerbalDataObjectViewModel" /> class.
@@ -36,6 +37,13 @@ namespace KerbalEdit.ViewModels
 
         protected override void LoadChildren()
         {
+            if (childrenLoaded)
+            {
+                return;
+            }
+
+            RemoveDummyChild();
+
             var enumerator = objs.GetEnumerator();
             var i = 0;
             while (enumerator.MoveNext())
@@ -43,6 +51,8 @@ namespace KerbalEdit.ViewModels
                 Children.Add(new KerbalDataObjectViewModel(this, (IKerbalDataObject)enumerator.Current));
                 i++;
             }
+
+            childrenLoaded = true;
             
         }
     }

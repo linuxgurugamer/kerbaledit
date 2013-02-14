@@ -17,8 +17,10 @@ namespace KerbalEdit.ViewModels
     /// <summary>
     /// TODO: Class Summary
     /// </summary>
-    public class StorableObjectViewModel<T> : TreeViewItemViewModel where T : class, IStorable, new()
+    public class StorableObjectViewModel<T> : KerbalDataObjectViewModel where T : class, IStorable, new()
     {
+        private bool childrenLoaded;
+
         //private T obj;
         /// <summary>
         /// Initializes a new instance of the <see cref="StorableObjectViewModel" /> class.
@@ -27,29 +29,68 @@ namespace KerbalEdit.ViewModels
         {
         }
 
+        public override bool IsSelected
+        {
+            get
+            {
+                return base.IsSelected;
+            }
+            set
+            {
+                LoadChildren();
+                base.IsSelected = value;
+            }
+        }
+
+        public override IKerbalDataObject Object
+        {
+            get
+            {
+                if (base.Object == null)
+                {
+                    Object = ((StorableObjectsViewModel<T>)Parent).Objects[DisplayName];
+                }
+
+                return base.Object;
+            }
+            protected set
+            {
+                base.Object = value;
+            }
+        }
+
         protected override void LoadChildren()
         {
-            if (Object == null)
+            if (childrenLoaded)
             {
-                Object = ((StorableObjectsViewModel<T>)Parent).Objects[DisplayName];
+                return;
+            }
 
-                foreach (var prop in Object.GetType().GetProperties())
+            RemoveDummyChild();
+
+            foreach (var prop in Object.GetType().GetProperties())
+            {
+                if (prop.PropertyType.GetInterfaces().Any(i => i.FullName.Contains("IKerbalDataObject")))
                 {
-                    if (prop.PropertyType.GetInterfaces().Any(i => i.FullName.Contains("IKerbalDataObject")))
-                    {
-                        Children.Add(new KerbalDataObjectViewModel(this, (IKerbalDataObject)prop.GetValue(Object)));
-                    }
+                    var obj = (IKerbalDataObject)prop.GetValue(Object);
 
-                    if (prop.PropertyType.IsGenericType && (prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>)))
+                    if (obj != null)
                     {
-                        var val = prop.GetValue(Object);
-                        if (val != null && val.GetType().GetGenericArguments()[0].GetInterfaces().Contains(typeof(IKerbalDataObject)))
-                        {
-                            Children.Add(new KerbalDataObjectListViewModel(prop.Name, this, (ICollection)prop.GetValue(Object)));
-                        }
+                        Children.Add(new KerbalDataObjectViewModel(this, obj));
+                    }
+                }
+
+                if (prop.PropertyType.IsGenericType && (prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>)))
+                {
+                    var val = prop.GetValue(Object);
+                    if (val != null && val.GetType().GetGenericArguments()[0].GetInterfaces().Contains(typeof(IKerbalDataObject)))
+                    {
+                        Children.Add(new KerbalDataObjectListViewModel(prop.Name, this, (ICollection)prop.GetValue(Object)));
                     }
                 }
             }
+
+            childrenLoaded = true;
         }
     }
 }

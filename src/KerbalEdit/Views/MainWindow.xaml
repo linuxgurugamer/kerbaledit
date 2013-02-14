@@ -44,7 +44,7 @@
             <DataGrid Name="trainingCrew" Grid.Row="1" Grid.Column="0" Margin="467,335,10,10"
                             VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                             AutoGenerateColumns="False" IsSynchronizedWithCurrentItem="True" 
-                            ItemsSource="{Binding Path=Data.UnmappedProperties}" RowHeight="70">
+                            ItemsSource="{Binding Path=Data.SelectedItem.UnmappedProperties}" RowHeight="70">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Path=Key, Mode=TwoWay}" MinWidth="150">
                     </DataGridTextColumn>

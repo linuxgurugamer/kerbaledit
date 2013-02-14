@@ -26,7 +26,6 @@ using Newtonsoft.Json.Linq;
         private KerbalData kd;
         private ISelectedViewModel parent;
         private IViewModel selectedItem;
-        private ObservableCollection<UnMappedProp> unmappedProperties;
 
         /// Initializes a new instance of the <see cref="KerbalDataViewModel" /> class.
         /// </summary>	
@@ -74,36 +73,8 @@ using Newtonsoft.Json.Linq;
 
             set
             {
-                if (value is TreeViewItemViewModel)
-                {
-                    selectedItem = (TreeViewItemViewModel)value;
-                    OnPropertyChanged("SelectedItem", selectedItem);
-
-                    var list = new ObservableCollection<UnMappedProp>();
-                    foreach (var kvp in ((TreeViewItemViewModel)selectedItem).Object)
-                    {
-                        list.Add(new UnMappedProp(kvp.Key, (ObservableDictionary<string, JToken>)((TreeViewItemViewModel)selectedItem).Object));
-                    }
-
-                    UnmappedProperties = list;
-                }
-                else
-                {
-                    throw new KerbalEditException("Provided value is not of type TreeViewItemViewModel. This ViewModel is only wired to work with TreeViewModels");
-                }
-            }
-        }
-
-        public ObservableCollection<UnMappedProp> UnmappedProperties
-        {
-            get
-            {
-                return unmappedProperties;
-            }
-            set
-            {
-                unmappedProperties = value;
-                OnPropertyChanged("UnmappedProperties", unmappedProperties);
+                selectedItem = value;
+                OnPropertyChanged("SelectedItem", selectedItem);
             }
         }
 
@@ -112,73 +83,6 @@ using Newtonsoft.Json.Linq;
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
-
-        public class UnMappedProp : INotifyPropertyChanged
-        {
-            private string key;
-            private JToken value;
-
-            public UnMappedProp(string key, ObservableDictionary<string, JToken> parent)
-            {
-                Parent = parent;
-                this.key = key;
-                value = Parent[key];
-
-            }
-
-            public string Key
-            {
-                get
-                {
-                    return key;
-                }
-                set
-                {
-                    var newKey = value;
-
-                    if (Parent.ContainsKey(key))
-                    {
-                        Parent.Remove(key);
-                    }
-
-                    if (Parent.ContainsKey(newKey))
-                    {
-                        Parent.Remove(newKey);
-                    }
-
-                    Parent.Add(newKey, Value);
-                    
-                    key = newKey;
-                    OnPropertyChanged("Key", key);
-                }
-            }
-
-            public string Value
-            {
-                get
-                {
-                    return value.ToString();
-                }
-                set
-                {
-                    this.value = value;
-                    Parent[key] = value;
-                    OnPropertyChanged("Value", this.value);
-                }
-            }
-
-            public ObservableDictionary<string, JToken> Parent { get; private set; }
-
-            public event PropertyChangedEventHandler PropertyChanged;
-
-            private void OnPropertyChanged(string name, object value = null)
-            {
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(name));
-                }
             }
         }
     }
