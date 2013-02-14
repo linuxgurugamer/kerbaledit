@@ -19,10 +19,10 @@ using Newtonsoft.Json.Linq;
     /// <summary>
     /// TODO: Class Summary
     /// </summary>
-    public sealed class KerbalDataViewModel : ISelectedViewModel, INotifyPropertyChanged
+    public sealed class KerbalDataViewModel : ISelectedViewModel, INotifyPropertyChanged, IDisposable
     {
 
-        private readonly ReadOnlyCollection<TreeViewItemViewModel> objects; //= new ReadOnlyCollection<string>(new List<string>() { "Save Games", "Scenarios", "Training Scenarios", "VAB Craft", "SPH Craft", "Settings/Configuration" });
+        private readonly ObservableCollection<TreeViewItemViewModel> objects; //= new ReadOnlyCollection<string>(new List<string>() { "Save Games", "Scenarios", "Training Scenarios", "VAB Craft", "SPH Craft", "Settings/Configuration" });
         private KerbalData kd;
         private ISelectedViewModel parent;
         private IViewModel selectedItem;
@@ -34,7 +34,7 @@ using Newtonsoft.Json.Linq;
             this.kd = kd;
             this.parent = null;
 
-            objects = new ReadOnlyCollection<TreeViewItemViewModel>(new List<TreeViewItemViewModel>()
+            objects = new ObservableCollection<TreeViewItemViewModel>(new List<TreeViewItemViewModel>()
             {
                 new StorableObjectsViewModel<SaveFile>(kd.Saves, "Saves", this),
                 new StorableObjectsViewModel<SaveFile>(kd.Scenarios, "Scenarios", this),
@@ -62,7 +62,7 @@ using Newtonsoft.Json.Linq;
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
-        public ReadOnlyCollection<TreeViewItemViewModel> Objects { get { return objects; } }
+        public ObservableCollection<TreeViewItemViewModel> Objects { get { return objects; } }
 
         public IViewModel SelectedItem
         {
@@ -84,6 +84,14 @@ using Newtonsoft.Json.Linq;
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
+        }
+
+        public void Dispose()
+        {
+            objects.Clear(); //= new ReadOnlyCollection<string>(new List<string>() { "Save Games", "Scenarios", "Training Scenarios", "VAB Craft", "SPH Craft", "Settings/Configuration" });
+            kd = null;
+            parent = null;
+            selectedItem = null;
         }
     }
 }

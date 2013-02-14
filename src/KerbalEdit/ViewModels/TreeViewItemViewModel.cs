@@ -187,6 +187,7 @@ using KerbalData;
         {
         }
 
+        
         public TreeViewItemViewModel TreeParent
         {
             get { return parent as TreeViewItemViewModel; }

@@ -15,6 +15,7 @@ namespace KerbalEdit.ViewModels
     using System.Windows.Forms;
 
     using KerbalData;
+    using System.IO;
 
     /// <summary>
     /// TODO: Class Summary
@@ -92,8 +93,21 @@ namespace KerbalEdit.ViewModels
 
         private void UpdateInstallPath()
         {
-            Data = null;
-            Data = new KerbalDataViewModel(KerbalData.Create(installPath));
+            // Temporary Fix for memory leak. While this is expensive we only do it when loading/unloading a new file/install which should happen.
+            // fairly irrigularly
+            // TODO: refactor to address leak.
+            if (Data != null)
+            {
+                Data.Dispose();
+                Data = null;
+
+                GC.Collect(); // NOTE: this is the devil, only do GC.Collect in extreme circumstances, avoid going to production with any code conatining GC.Collect at all costs.
+            }
+
+            if (!string.IsNullOrEmpty(installPath) && Directory.Exists(installPath))
+            {
+                Data = new KerbalDataViewModel(KerbalData.Create(installPath));
+            }
         }
 
         private void OnPropertyChanged(string name, object value = null)
