@@ -30,8 +30,6 @@ namespace KerbalEdit.ViewModels
         private KerbalDataViewModel kerbalData;
         private TreeViewItemViewModel selectedItem;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
         /// </summary>	
@@ -107,14 +105,6 @@ namespace KerbalEdit.ViewModels
             if (!string.IsNullOrEmpty(installPath) && Directory.Exists(installPath))
             {
                 Data = new KerbalDataViewModel(KerbalData.Create(installPath));
-            }
-        }
-
-        private void OnPropertyChanged(string name, object value = null)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
         }
     }

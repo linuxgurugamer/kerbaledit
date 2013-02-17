@@ -18,5 +18,6 @@ namespace KerbalEdit.ViewModels
     public interface IViewModel : INotifyPropertyChanged
     {
         IViewModel Parent { get; }
+        bool IsDirty { get; set;}
     }
 }

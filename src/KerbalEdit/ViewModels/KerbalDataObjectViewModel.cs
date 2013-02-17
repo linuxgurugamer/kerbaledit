@@ -12,10 +12,14 @@ namespace KerbalEdit.ViewModels
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
+    using System.Reflection;
     using System.Text;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+
     using KerbalData;
     using KerbalData.Models;
-    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// TODO: Class Summary
@@ -23,7 +27,8 @@ namespace KerbalEdit.ViewModels
     public class KerbalDataObjectViewModel : TreeViewItemViewModel
     {
         private bool childrenLoaded;
-        private ObservableCollection<UnMappedProp> unmappedProperties;
+        private ObservableCollection<MappedPropertyViewModel> mappedProperties;
+        private ObservableCollection<UnMappedPropertyViewModel> unmappedProperties;
 
         public KerbalDataObjectViewModel(string displayName, TreeViewItemViewModel parent)
             : base(displayName, parent)
@@ -39,8 +44,6 @@ namespace KerbalEdit.ViewModels
             Object = obj;
         }
 
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-
         public override bool IsSelected
         {
             get
@@ -54,17 +57,40 @@ namespace KerbalEdit.ViewModels
             }
         }
 
-        public ObservableCollection<UnMappedProp> UnmappedProperties
+        public ObservableCollection<MappedPropertyViewModel> MappedProperties
+        {
+            get
+            {
+                if (Object != null && mappedProperties == null)
+                {
+                    var props = new List<MappedPropertyViewModel>();
+                    mappedProperties =
+                        new ObservableCollection<MappedPropertyViewModel>(BuildRegisteredNames(Object.GetType().GetProperties())
+                            .Select(n => new MappedPropertyViewModel(n, Object, this)).ToList());
+                }
+
+                return mappedProperties;
+            }
+            
+            private set
+            {
+                mappedProperties = value;
+                OnPropertyChanged("MappedProperties", mappedProperties);
+                IsDirty = true;
+            }
+        }
+
+        public ObservableCollection<UnMappedPropertyViewModel> UnmappedProperties
         {
             get
             {
                 if (Object != null && unmappedProperties == null)
                 {
                     unmappedProperties =
-                            new ObservableCollection<UnMappedProp>(
-                                Object.Select(kvp => new UnMappedProp(
+                            new ObservableCollection<UnMappedPropertyViewModel>(
+                                Object.Select(kvp => new UnMappedPropertyViewModel(
                                     kvp.Key,
-                                    (ObservableDictionary<string, JToken>)Object)).ToList());
+                                    (ObservableDictionary<string, JToken>)Object, this)).ToList());
                 }
 
                 return unmappedProperties;
@@ -73,6 +99,7 @@ namespace KerbalEdit.ViewModels
             {
                 unmappedProperties = value;
                 OnPropertyChanged("UnmappedProperties", unmappedProperties);
+                IsDirty = true;
             }
         }
 
@@ -110,79 +137,32 @@ namespace KerbalEdit.ViewModels
             childrenLoaded = true;
         }
 
-        public class UnMappedProp : INotifyPropertyChanged
+        private IList<string> BuildRegisteredNames(PropertyInfo[] infoArray)
         {
-            private string key;
-            private JToken value;
+            var list = new List<string>();
 
-            public UnMappedProp(string key, ObservableDictionary<string, JToken> parent)
+            // NOTE: We are only recgnonizing names that have had thier JSON Attribute explicitly set
+            for (var i = 0; i < infoArray.Count(); i++)
             {
-                Parent = parent;
-                this.key = key;
-                value = Parent[key];
+                var propInfo = infoArray[i];
 
-            }
-
-            public string Key
-            {
-                get
+                // Complex types and lists are handled by the tree view, TODO: need support for lists/arrays of primitives. 
+                if (propInfo.PropertyType == typeof(string)
+                    || propInfo.PropertyType == typeof(int)
+                    || propInfo.PropertyType == typeof(decimal)
+                    || propInfo.PropertyType == typeof(float)
+                    || propInfo.PropertyType == typeof(double)
+                    || propInfo.PropertyType == typeof(long)
+                    || propInfo.PropertyType == typeof(char)
+                    || propInfo.PropertyType == typeof(bool)
+                    || propInfo.PropertyType == typeof(string))
                 {
-                    return key;
-                }
-                set
-                {
-                    var newKey = value;
-
-                    if (Parent.ContainsKey(key))
-                    {
-                        Parent.Remove(key);
-                    }
-
-                    if (Parent.ContainsKey(newKey))
-                    {
-                        Parent.Remove(newKey);
-                    }
-
-                    Parent.Add(newKey, Value);
-
-                    key = newKey;
-                    OnPropertyChanged("Key", key);
+                    list.AddRange(((JsonPropertyAttribute[])propInfo.GetCustomAttributes(typeof(JsonPropertyAttribute), true)).Select(p => propInfo.Name));
                 }
             }
 
-            public string Value
-            {
-                get
-                {
-                    return value.ToString();
-                }
-                set
-                {
-                    this.value = value;
-                    Parent[key] = value;
-                    OnPropertyChanged("Value", this.value);
-                }
-            }
-
-            public ObservableDictionary<string, JToken> Parent { get; private set; }
-
-            public event PropertyChangedEventHandler PropertyChanged;
-
-            private void OnPropertyChanged(string name, object value = null)
-            {
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(name));
-                }
-            }
+            return list;
         }
 
-        protected override void OnPropertyChanged(string name, object value = null)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
     }
 }

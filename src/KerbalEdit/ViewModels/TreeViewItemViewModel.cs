@@ -26,7 +26,7 @@ using KerbalData;
         private readonly IViewModel parent;
         private IKerbalDataObject obj;
 
-        private bool isExpanded, isSelected;
+        private bool isExpanded, isSelected, isDirty;
         private string displayName, toolTip;
 
         protected TreeViewItemViewModel(string displayName, IViewModel parent = null, bool lazyLoadChildren = true)
@@ -50,24 +50,6 @@ using KerbalData;
             get { return obj; }
             protected set { obj = value; }
         }
-
-        /*
-        public static TreeViewItemViewModel SelectedItem
-        {
-            get
-            {
-                return selectedItem;
-            }
-
-            private set
-            {
-                if (selectedItem != value)
-                {
-                    selectedItem = value;
-
-                }
-            }
-        }*/
 
         public string DisplayName
         {
@@ -158,7 +140,7 @@ using KerbalData;
         }
 
         /// <summary>
-        /// Gets/sets whether the TreeViewItem 
+        /// Gets or sets a value indicating whether the TreeViewItem 
         /// associated with this object is selected.
         /// </summary>
         public virtual bool IsSelected
@@ -175,6 +157,25 @@ using KerbalData;
                     {
                         OnSelectedItemChanged(this);
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the TreeViewItem 
+        /// associated with this object is selected.
+        /// </summary>
+        public virtual bool IsDirty
+        {
+            get { return isDirty; }
+            set
+            {
+                isDirty = value;
+                OnPropertyChanged("IsDirty");
+
+                if (isDirty && parent != null && parent is IViewModel)
+                {
+                    parent.IsDirty = true;
                 }
             }
         }

@@ -12,21 +12,25 @@ namespace KerbalEdit.ViewModels
     using System.ComponentModel;
     using System.Linq;
     using System.Text;
+
+    using Newtonsoft.Json.Linq;
+
     using KerbalData;
     using KerbalData.Models;
-using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// TODO: Class Summary
     /// </summary>
     public sealed class KerbalDataViewModel : ISelectedViewModel, INotifyPropertyChanged, IDisposable
     {
-
-        private readonly ObservableCollection<TreeViewItemViewModel> objects; //= new ReadOnlyCollection<string>(new List<string>() { "Save Games", "Scenarios", "Training Scenarios", "VAB Craft", "SPH Craft", "Settings/Configuration" });
+        private readonly ObservableCollection<TreeViewItemViewModel> objects; 
         private KerbalData kd;
         private ISelectedViewModel parent;
         private IViewModel selectedItem;
 
+        private bool isDirty;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="KerbalDataViewModel" /> class.
         /// </summary>	
         public KerbalDataViewModel(KerbalData kd)
@@ -44,7 +48,6 @@ using Newtonsoft.Json.Linq;
                 new StorableObjectsViewModel<PartFile>(kd.Parts, "Parts", this),
                 new StorableObjectsViewModel<ConfigFile>(kd.KspSettings, "KspSettings", this)
             });
-
         }
 
         public KerbalData Data
@@ -58,6 +61,19 @@ using Newtonsoft.Json.Linq;
         public IViewModel Parent
         {
             get { return parent; }
+        }
+
+        public bool IsDirty
+        {
+            get
+            {
+                return isDirty;
+            }
+            set
+            {
+                isDirty = value;
+                OnPropertyChanged("IsDirty");
+            }
         }
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -88,7 +104,7 @@ using Newtonsoft.Json.Linq;
 
         public void Dispose()
         {
-            objects.Clear(); //= new ReadOnlyCollection<string>(new List<string>() { "Save Games", "Scenarios", "Training Scenarios", "VAB Craft", "SPH Craft", "Settings/Configuration" });
+            objects.Clear();
             kd = null;
             parent = null;
             selectedItem = null;

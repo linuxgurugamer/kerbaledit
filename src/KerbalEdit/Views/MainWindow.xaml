@@ -3,14 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:KerbalEdit"
         xmlns:vm="clr-namespace:KerbalEdit.ViewModels"
+        xmlns:c="clr-namespace:KerbalEdit.Views.Converters"
         Title="KerbalEdit - Take control of your KSP Data" Height="768" Width="1360">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>  
     <Window.Resources>
+        <c:IsDirtyFontStyleConverter x:Key="isDirtyFontStyleConverter" />
+        <c:ChangedItemBackgroundConverter x:Key="changedItemBackgroundConverter" />
         <HierarchicalDataTemplate x:Key="storableObjectsTemplate"
                                   ItemsSource="{Binding Path=Children}">
-            <TextBlock Text="{Binding Path=DisplayName}" ></TextBlock>
+            <TextBlock Text="{Binding Path=DisplayName}"></TextBlock>
             
         </HierarchicalDataTemplate>
     </Window.Resources>
@@ -21,17 +24,16 @@
         <TreeView ItemsSource="{Binding Path=Data.Objects}" HorizontalAlignment="Left" Height="685" Margin="10,43,0,0" VerticalAlignment="Top" Width="447"
                   ItemTemplate="{StaticResource storableObjectsTemplate}">
             <TreeView.ItemContainerStyle>
-                <!-- 
-        This Style binds a TreeViewItem to a TreeViewItemViewModel. 
-        -->
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <Setter Property="FontStyle" Value="{Binding IsDirty, Mode=TwoWay, Converter={StaticResource isDirtyFontStyleConverter}}" />
+                    <Setter Property="Background" Value="{Binding IsDirty, Mode=TwoWay, Converter={StaticResource changedItemBackgroundConverter}}" />
                     <Setter Property="FontWeight" Value="Normal" />
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="FontWeight" Value="Bold" />
-                        </Trigger>
+                        </Trigger>                     
                     </Style.Triggers>
                 </Style>
             </TreeView.ItemContainerStyle>
@@ -41,14 +43,43 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <DataGrid Name="trainingCrew" Grid.Row="1" Grid.Column="0" Margin="467,335,10,10"
-                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+            <DataGrid Name="mappedProps" Grid.Row="1" Grid.Column="0" Margin="467,48,10,378" HorizontalAlignment="Stretch"
                             AutoGenerateColumns="False" IsSynchronizedWithCurrentItem="True" 
-                            ItemsSource="{Binding Path=Data.SelectedItem.UnmappedProperties}" RowHeight="70">
+                            ItemsSource="{Binding Path=Data.SelectedItem.MappedProperties}">
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="FontStyle" Value="{Binding IsDirty, Mode=TwoWay, Converter={StaticResource isDirtyFontStyleConverter}}" />
+                        <Setter Property="Background" Value="{Binding IsDirty, Mode=TwoWay, Converter={StaticResource changedItemBackgroundConverter}}" />
+                        <Setter Property="FontWeight" Value="Normal" />
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Path=Key, Mode=TwoWay}" MinWidth="150">
+                    <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}" MinWidth="150" IsReadOnly="True">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Type" Binding="{Binding Path=Value, Mode=TwoWay}" MinWidth="200">
+                    <DataGridTextColumn Header="Value" Binding="{Binding Path=Value, Mode=TwoWay}" MinWidth="700">
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <DataGrid Name="unmappedProps" Grid.Row="1" Grid.Column="0" Margin="467,373,10,10" HorizontalAlignment="Stretch"
+                            AutoGenerateColumns="False" IsSynchronizedWithCurrentItem="True" 
+                            ItemsSource="{Binding Path=Data.SelectedItem.UnmappedProperties}">
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="FontStyle" Value="{Binding IsDirty, Mode=TwoWay, Converter={StaticResource isDirtyFontStyleConverter}}" />
+                        <Setter Property="Background" Value="{Binding IsDirty, Mode=TwoWay, Converter={StaticResource changedItemBackgroundConverter}}" />
+                        <Setter Property="FontWeight" Value="Normal" />
+                    </Style>
+                </DataGrid.RowStyle>                
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Key" Binding="{Binding Path=Key, Mode=TwoWay}" MinWidth="150">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Value" Binding="{Binding Path=Value, Mode=TwoWay}" MinWidth="700">
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>

@@ -68,9 +68,13 @@
     <Compile Include="ViewModels\KerbalDataObjectViewModel.cs" />
     <Compile Include="ViewModels\KerbalDataViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\MappedPropertyViewModel.cs" />
     <Compile Include="ViewModels\StorableObjectsViewModel.cs" />
     <Compile Include="ViewModels\StorableObjectViewModel.cs" />
     <Compile Include="ViewModels\TreeViewItemViewModel.cs" />
+    <Compile Include="ViewModels\UnMappedPropertyViewModel.cs" />
+    <Compile Include="Views\Converters\ChangedItemBackgroundConverter.cs" />
+    <Compile Include="Views\Converters\IsDirtyFontStyleConverter.cs" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
