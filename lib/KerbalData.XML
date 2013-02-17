@@ -887,13 +887,6 @@
             </summary>
             <returns>all available data</returns>
         </member>
-        <member name="M:KerbalData.IKerbalDataRepo`1.Get(System.Collections.Generic.IList{Newtonsoft.Json.Linq.JObject}@)">
-            <summary>
-            Gets all data elements available to the repository 
-            </summary>
-            <param name="data">base data definition // TODO: break JSON.NET dependency</param>
-            <returns>all availablee data</returns>
-        </member>
         <member name="M:KerbalData.IKerbalDataRepo`1.GetIds">
             <summary>
             Gets meta-data for all data elements (used for quick loading of needed data to lookup elements without de-serializing all data.
@@ -907,27 +900,11 @@
             <param name="predicate">filter to use</param>
             <returns>data matching requirement</returns>
         </member>
-        <member name="M:KerbalData.IKerbalDataRepo`1.Get(System.Func{`0,System.Boolean},System.Collections.Generic.IList{Newtonsoft.Json.Linq.JObject}@)">
-            <summary>
-            Gets all data elements available to the repository that match the predicate
-            </summary>
-            <param name="predicate">filter to use</param>
-            <param name="data">base data definition // TODO: break JSON.NET dependency</param>
-            <returns>data matching requirement</returns>
-        </member>
         <member name="M:KerbalData.IKerbalDataRepo`1.Get(System.String)">
             <summary>
             Gets data element by Id/Name
             </summary>
             <param name="id">Id/Name to retrieve</param>
-            <returns>requested data element</returns>
-        </member>
-        <member name="M:KerbalData.IKerbalDataRepo`1.Get(System.String,Newtonsoft.Json.Linq.JObject@)">
-            <summary>
-            Gets data element by Id/Name
-            </summary>
-            <param name="id">Id/Name to retrieve</param>
-            <param name="data">base data definition // TODO: break JSON.NET dependency</param>
             <returns>requested data element</returns>
         </member>
         <member name="M:KerbalData.IKerbalDataRepo`1.Put(System.String,`0)">
@@ -1192,26 +1169,11 @@
             </summary>
             <returns>object list</returns>
         </member>
-        <member name="M:KerbalData.Providers.FileSystemRepository`1.Get(System.Collections.Generic.IList{Newtonsoft.Json.Linq.JObject}@)">
-            <summary>
-            Gets all objects managed by the repository along with soure copies for backup/reversion
-            </summary>
-            <param name="data">data list to populate with source data</param>
-            <returns>de-serialized object list</returns>
-        </member>
         <member name="M:KerbalData.Providers.FileSystemRepository`1.Get(System.Func{`0,System.Boolean})">
             <summary>
             NOT YET IMPLMENTED
             </summary>
             <param name="func"></param>
-            <returns></returns>
-        </member>
-        <member name="M:KerbalData.Providers.FileSystemRepository`1.Get(System.Func{`0,System.Boolean},System.Collections.Generic.IList{Newtonsoft.Json.Linq.JObject}@)">
-            <summary>
-            NOT YET IMPLMENTED
-            </summary>
-            <param name="func"></param>
-            <param name="data"></param>
             <returns></returns>
         </member>
         <member name="M:KerbalData.Providers.FileSystemRepository`1.Get(System.String)">
@@ -1220,14 +1182,6 @@
             </summary>
             <param name="id">object id to retrieve</param>
             <returns>de-serialized object</returns>
-        </member>
-        <member name="M:KerbalData.Providers.FileSystemRepository`1.Get(System.String,Newtonsoft.Json.Linq.JObject@)">
-            <summary>
-            Gets an object with a particular Id along with a copy of the source data for backup/reversion
-            </summary>
-            <param name="id">object id to retrieve</param>
-            <param name="data">source data object to populate</param>
-            <returns>de-serialized data object</returns>
         </member>
         <member name="M:KerbalData.Providers.FileSystemRepository`1.Put(System.String,`0)">
             <summary>

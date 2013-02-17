@@ -10,6 +10,7 @@ namespace KerbalEdit.ViewModels
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Text;
     using KerbalData;
     using KerbalData.Models;
@@ -72,7 +73,8 @@ namespace KerbalEdit.ViewModels
             {
                 if (prop.PropertyType.GetInterfaces().Any(i => i.FullName.Contains("IKerbalDataObject")))
                 {
-                    var obj = (IKerbalDataObject)prop.GetValue(Object);
+                    var obj = (IKerbalDataObject)prop.GetValue(Object, BindingFlags.GetProperty, null, null, null);
+                    //var obj = (IKerbalDataObject)prop.GetValue(Object);
 
                     if (obj != null)
                     {
@@ -82,10 +84,12 @@ namespace KerbalEdit.ViewModels
 
                 if (prop.PropertyType.IsGenericType && (prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>)))
                 {
-                    var val = prop.GetValue(Object);
+                    var val = prop.GetValue(Object, BindingFlags.GetProperty, null, null, null);
+                    //var val = prop.GetValue(Object);
+
                     if (val != null && val.GetType().GetGenericArguments()[0].GetInterfaces().Contains(typeof(IKerbalDataObject)))
                     {
-                        Children.Add(new KerbalDataObjectListViewModel(prop.Name, this, (ICollection)prop.GetValue(Object)));
+                        Children.Add(new KerbalDataObjectListViewModel(prop.Name, this, (ICollection)val));
                     }
                 }
             }

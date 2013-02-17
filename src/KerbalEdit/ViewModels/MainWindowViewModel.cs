@@ -28,7 +28,7 @@ namespace KerbalEdit.ViewModels
 
         private string installPath;
         private KerbalDataViewModel kerbalData;
-        private TreeViewItemViewModel selectedItem;
+        //private TreeViewItemViewModel selectedItem;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindowViewModel" /> class.

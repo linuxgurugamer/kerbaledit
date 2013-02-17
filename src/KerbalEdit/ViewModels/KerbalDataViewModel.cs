@@ -25,7 +25,7 @@ namespace KerbalEdit.ViewModels
     {
         private readonly ObservableCollection<TreeViewItemViewModel> objects; 
         private KerbalData kd;
-        private ISelectedViewModel parent;
+        //private ISelectedViewModel parent;
         private IViewModel selectedItem;
 
         private bool isDirty;
@@ -36,7 +36,6 @@ namespace KerbalEdit.ViewModels
         public KerbalDataViewModel(KerbalData kd)
         {
             this.kd = kd;
-            this.parent = null;
 
             objects = new ObservableCollection<TreeViewItemViewModel>(new List<TreeViewItemViewModel>()
             {
@@ -60,7 +59,7 @@ namespace KerbalEdit.ViewModels
 
         public IViewModel Parent
         {
-            get { return parent; }
+            get { return null; }
         }
 
         public bool IsDirty
@@ -106,7 +105,6 @@ namespace KerbalEdit.ViewModels
         {
             objects.Clear();
             kd = null;
-            parent = null;
             selectedItem = null;
         }
     }

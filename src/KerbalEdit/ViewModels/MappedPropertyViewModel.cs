@@ -54,11 +54,13 @@ namespace KerbalEdit.ViewModels
         {
             get
             {
-                return property.GetValue(parent);
+                return property.GetValue(parent, BindingFlags.GetProperty, null, null, null);
+                //return property.GetValue(parent);
             }
             set
             {
-                property.SetValue(parent, ConvertInput(property.PropertyType, value));
+                property.SetValue(parent, ConvertInput(property.PropertyType, value), BindingFlags.SetProperty, null, null, null);
+                //property.SetValue(parent, ConvertInput(property.PropertyType, value));
                 OnPropertyChanged("Value", value);
 
                 IsDirty = true;
