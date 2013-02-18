@@ -66,6 +66,7 @@
     <Compile Include="ViewModels\ChangeOrbitDialogViewModel.cs" />
     <Compile Include="ViewModels\ExportDataDialogViewModel.cs" />
     <Compile Include="ViewModels\ICommandViewModel.cs" />
+    <Compile Include="ViewModels\ImportDataDialogViewModel.cs" />
     <Compile Include="ViewModels\IStorableObjectsViewModel.cs" />
     <Compile Include="ViewModels\ISelectedViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
@@ -89,6 +90,9 @@
     <Compile Include="Views\ExportDataDialogView.xaml.cs">
       <DependentUpon>ExportDataDialogView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ImportDataDialogView.xaml.cs">
+      <DependentUpon>ImportDataDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -100,6 +104,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ExportDataDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ImportDataDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

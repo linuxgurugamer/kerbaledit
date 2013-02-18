@@ -82,6 +82,30 @@ namespace KerbalEdit.Views
                             })
                     });
 
+                menu.Items.Add(
+                    new MenuItem()
+                    {
+                        Header = "Import",
+                        IsEnabled = true,
+                        Command = new DelegateCommand(
+                            () =>
+                            {
+                                var objects = ((IStorableObjectsViewModel)vm).Objects;
+                                var importVm = new ImportDataDialogViewModel(objects, windowVm.Data.Data.ProcRegistry);
+                                (new ImportDataDialogView(importVm) { Owner = this }).ShowDialog();
+
+                                if (importVm.Object != null)
+                                {
+                                    var tempId = Guid.NewGuid().ToString();
+                                    objects.Add(importVm.Object, tempId);
+                                    (new SaveAsDialogView(new SaveAsDialogViewModel((IStorable)importVm.Object)) { Owner = this }).ShowDialog();
+                                    objects.Remove(tempId);
+                                    ((IStorableObjectsViewModel)vm).Refresh();
+                                }
+                            })
+                    });
+
+
                 item.ContextMenu = menu.Items.Count > 0 ? menu : new ContextMenu() { Visibility = Visibility.Hidden };
 
                 return;
@@ -133,8 +157,6 @@ namespace KerbalEdit.Views
                         Command = new DelegateCommand(
                             () =>
                             {
-                                //var registry = 
-                                //var registry = ((KerbalDataViewModel)((TreeViewItemViewModel)vm.Parent).Parent).Data.ProcRegistry;
                                 (new ExportDataDialogView(new ExportDataDialogViewModel((IStorable)vm.Object, windowVm.Data.Data.ProcRegistry)) { Owner = this }).ShowDialog();
                             })
                     });

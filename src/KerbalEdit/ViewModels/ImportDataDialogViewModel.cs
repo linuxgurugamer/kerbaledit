@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="ExportDataDialogViewModel.cs" company="OpenSauceSolutions">
+// <copyright file="ImportDataDialogViewModel.cs" company="OpenSauceSolutions">
 // © 2013 OpenSauce Solutions
 // </copyright>
 // -----------------------------------------------------------------------
@@ -20,38 +20,39 @@ namespace KerbalEdit.ViewModels
     /// <summary>
     /// TODO: Class Summary
     /// </summary>
-    public class ExportDataDialogViewModel : INotifyPropertyChanged
+    public class ImportDataDialogViewModel : INotifyPropertyChanged
     {
         private string path;
-        private IStorable storable;
-        private ProcessorRegistry registry; 
+        private IStorableObjects storableObjects;
+        private ProcessorRegistry registry;
 
-        private bool exportComplete;
+        private IStorable obj;
+        private bool importComplete;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SaveAsDialogViewModel" /> class.
         /// </summary>	
-        public ExportDataDialogViewModel(IStorable storable, ProcessorRegistry registry)
+        public ImportDataDialogViewModel(IStorableObjects storableObjects, ProcessorRegistry registry)
         {
-            this.storable = storable;
+            this.storableObjects = storableObjects;
             this.registry = registry;
 
-            ExportStorableCommand = new DelegateCommand(
+            ImportStorableCommand = new DelegateCommand(
                 () =>
                 {
                     // TODO: Anywhere reflection is required due to the use of generics in KerbalData are places
                     // that should be reviewed for re-factoring on either the App or the API
                     var regType = registry.GetType();
                     var createMethod =
-                        regType.GetMethods().Where(m => m.Name == "Create").FirstOrDefault().MakeGenericMethod(new Type[] { storable.GetType() });
+                        regType.GetMethods().Where(m => m.Name == "Create").FirstOrDefault().MakeGenericMethod(storableObjects.GetType().GetGenericArguments());
 
-                    var saveMethod = 
-                        typeof(KspData).GetMethods().Where(m => m.Name == "SaveFile").Where(m => m.GetParameters()[2].ParameterType != typeof(string))
-                        .FirstOrDefault().MakeGenericMethod(new Type[] { storable.GetType() });
+                    var loadMethopd =
+                        typeof(KspData).GetMethods().Where(m => m.Name == "LoadKspFile").Where(m => m.GetParameters()[1].ParameterType != typeof(string))
+                        .FirstOrDefault().MakeGenericMethod(storableObjects.GetType().GetGenericArguments());
 
-                    saveMethod.Invoke(null, new object[] { path, storable, createMethod.Invoke(registry, null) });
- 
-                    ExportComplete = true;
+                    obj = (IStorable)loadMethopd.Invoke(null, new object[] { path, createMethod.Invoke(registry, null) });
+                    
+                    ImportComplete = true;
                 });
         }
 
@@ -69,21 +70,35 @@ namespace KerbalEdit.ViewModels
             }
         }
 
-        public bool ExportComplete
+        public bool ImportComplete
         {
             get
             {
-                return exportComplete;
+                return importComplete;
             }
 
             set
             {
-                exportComplete = value;
-                OnPropertyChanged("ExportComplete");
+                importComplete = value;
+                OnPropertyChanged("ImportComplete");
             }
         }
 
-        public ICommand ExportStorableCommand { get; set; }
+        public IStorable Object
+        {
+            get
+            {
+                return obj;
+            }
+
+            set
+            {
+                obj = value;
+                OnPropertyChanged("Object");
+            }
+        }
+
+        public ICommand ImportStorableCommand { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
