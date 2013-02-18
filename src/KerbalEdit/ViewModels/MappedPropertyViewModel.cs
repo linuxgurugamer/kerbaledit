@@ -79,7 +79,10 @@ namespace KerbalEdit.ViewModels
                 isDirty = value;
                 OnPropertyChanged("IsDirty");
 
-                viewModelParent.IsDirty = true;
+                if (viewModelParent.IsDirty != isDirty)
+                {
+                    viewModelParent.IsDirty = isDirty;
+                }
             }
         }
 

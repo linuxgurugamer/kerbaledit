@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="IIViewModel.cs" company="OpenSauceSolutions">
+// <copyright file="ICommandViewModel.cs" company="OpenSauceSolutions">
 // © 2013 OpenSauce Solutions
 // </copyright>
 // -----------------------------------------------------------------------
@@ -8,17 +8,16 @@ namespace KerbalEdit.ViewModels
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Linq;
     using System.Text;
+    using System.Windows.Input;
 
     /// <summary>
     /// TODO: Interface Summary
     /// </summary>
-    public interface IViewModel : INotifyPropertyChanged
+    public interface ICommandViewModel<T> where T : ICommand
     {
-        IViewModel Parent { get; }
-
-        bool IsDirty { get; set;}
+        string DisplayName { get; set; }
+        T Command { get; set; }
     }
 }

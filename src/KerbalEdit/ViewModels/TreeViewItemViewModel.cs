@@ -25,6 +25,7 @@ using KerbalData;
         private readonly ObservableCollection<TreeViewItemViewModel> children;
         private readonly IViewModel parent;
         private IKerbalDataObject obj;
+        private Type objType;
 
         private bool isExpanded, isSelected, isDirty;
         private string displayName, toolTip;
@@ -47,8 +48,29 @@ using KerbalData;
 
         public virtual IKerbalDataObject Object
         {
-            get { return obj; }
-            protected set { obj = value; }
+            get 
+            { 
+                return obj; 
+            }
+
+            protected set 
+            { 
+                obj = value;
+                objType = obj.GetType();
+            }
+        }
+
+        public virtual Type ObjectType
+        {
+            get 
+            { 
+                return objType; 
+            }
+
+            protected set 
+            { 
+                objType = value; 
+            }
         }
 
         public string DisplayName

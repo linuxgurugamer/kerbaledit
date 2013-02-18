@@ -60,6 +60,19 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        public override Type ObjectType
+        {
+            get
+            {
+                ObjectType = typeof(StorableObjectViewModel<T>); 
+                return base.ObjectType;
+            }
+            protected set
+            {
+                base.ObjectType = value;
+            }
+        }
+
         protected override void LoadChildren()
         {
             if (childrenLoaded)
@@ -77,7 +90,7 @@ namespace KerbalEdit.ViewModels
                     //var obj = (IKerbalDataObject)prop.GetValue(Object);
 
                     if (obj != null)
-                    {
+                    {   
                         Children.Add(new KerbalDataObjectViewModel(this, obj));
                     }
                 }

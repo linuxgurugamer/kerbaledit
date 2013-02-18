@@ -8,6 +8,7 @@ namespace KerbalEdit.ViewModels
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Text;
     using System.ComponentModel;
@@ -15,7 +16,8 @@ namespace KerbalEdit.ViewModels
     using System.Windows.Forms;
 
     using KerbalData;
-    using System.IO;
+
+    using Commands;
 
     /// <summary>
     /// TODO: Class Summary
@@ -39,6 +41,7 @@ namespace KerbalEdit.ViewModels
         }
 
         public ICommand OpenKspInstallFolderCommand { get; private set; }
+        public ICommand ShowMenuCommand { get; private set; }
 
         public KerbalDataViewModel Data
         {
@@ -87,6 +90,8 @@ namespace KerbalEdit.ViewModels
                         InstallPath = dlg.SelectedPath;
                     }
                 });
+
+            ShowMenuCommand = new BuildContextCommandsDataCommand();
         }
 
         private void UpdateInstallPath()
