@@ -32,9 +32,7 @@ namespace KerbalEdit.ViewModels
 
         public KerbalDataObjectViewModel(string displayName, TreeViewItemViewModel parent)
             : base(displayName, parent)
-        {
-
-        }
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KerbalDataObjectViewModel" /> class.
@@ -117,7 +115,6 @@ namespace KerbalEdit.ViewModels
                     if (prop.PropertyType.GetInterfaces().Any(i => i.FullName.Contains("IKerbalDataObject")))
                     {
                         var obj = (IKerbalDataObject)prop.GetValue(Object, BindingFlags.GetProperty, null, null, null);
-                        ///var obj = (IKerbalDataObject)prop.GetValue(Object);
 
                         if (obj != null)
                         {
@@ -129,7 +126,6 @@ namespace KerbalEdit.ViewModels
                     {
                         var val = prop.GetValue(Object, BindingFlags.GetProperty, null, null, null);
 
-                        //var val = prop.GetValue(Object);
                         if (val != null && val.GetType().GetGenericArguments()[0].GetInterfaces().Contains(typeof(IKerbalDataObject)))
                         {
                             Children.Add(new KerbalDataObjectListViewModel(prop.Name, this, (ICollection)val));

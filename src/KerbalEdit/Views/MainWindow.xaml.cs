@@ -18,7 +18,10 @@ namespace KerbalEdit.Views
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
+
     using KerbalData;
+    using KerbalData.Models;
+
     using ViewModels;
 
     /// <summary>
@@ -26,6 +29,10 @@ namespace KerbalEdit.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        // NOTE: I still don't really have the hang of TreeView and how to wireup a dynamic context model. The idea was to avoid repition in eith XAML or CS but that is not the case right now
+        // It looks like Blend or a different pattern would be a better choice. This can be hard to read but it works for now. 
+        // Some of this should be fixed by changed to the Models in KerbalData's ConsumerAPI
+
         public MainWindow()
         {
             InitializeComponent();
@@ -36,6 +43,7 @@ namespace KerbalEdit.Views
             var item = sender as TreeViewItem;
             var obj = item.Header;
 
+            // StorableObjectsViewModel{T} - List of Tree Obejects that can be stored/saved
             if (obj.GetType().IsGenericType 
                 && obj.GetType().GetGenericTypeDefinition() == typeof(StorableObjectsViewModel<>))
             {
@@ -61,11 +69,12 @@ namespace KerbalEdit.Views
                             })
                     });
 
-                item.ContextMenu = menu;
+                item.ContextMenu = menu.Items.Count > 0 ? menu : new ContextMenu() { Visibility = Visibility.Hidden };
 
                 return;
             }
 
+            // StorableObjectViewModel{T} - Individual Tree Obeject that can be stored/saved
             if (obj.GetType().IsGenericType
                 && obj.GetType().GetGenericTypeDefinition() == typeof(StorableObjectViewModel<>))
             {
@@ -89,28 +98,288 @@ namespace KerbalEdit.Views
                             })
                     });
 
-                item.ContextMenu = menu;
+                item.ContextMenu = menu.Items.Count > 0 ? menu : new ContextMenu() { Visibility = Visibility.Hidden };
 
                 return;
             }
 
+            // KerbalDataObjectListViewModel - List of Tree Obejects
             if (obj.GetType() == typeof(KerbalDataObjectListViewModel))
             {
+                var vm = (KerbalDataObjectListViewModel)obj;
+                var collection = vm.Objects;
+
+                if (collection.Count == 0)
+                {
+                    return;
+                }
+
+                Type itemType = typeof(object);
                 var menu = new ContextMenu();
-                menu.Items.Add(new MenuItem() { Header = "KerbalDataObjectListViewModel Items" });
-                item.ContextMenu = menu;
+
+                var list = new List<object>();
+
+                foreach (var colItem in collection)
+                {
+                    itemType = colItem.GetType();
+                    list.Add(colItem);
+                }
+
+                // SaveFile Types
+                if (itemType == typeof(Resource))
+                {
+                    menu.Items.Add(
+                        new MenuItem()
+                        {
+                            Header = "Fill",
+                            IsEnabled = list.Any(r => !((Resource)r).IsFull),
+                            Command = new DelegateCommand(
+                                () =>
+                                {
+                                    foreach (var resource in list)
+                                    {
+                                        ((Resource)resource).Fill();
+                                    }
+
+                                    vm.IsDirty = true;
+                                    RefreshDirtyFlag(vm.Parent);
+                                })
+                        });
+
+                    menu.Items.Add(
+                        new MenuItem()
+                        {
+                            Header = "Empty",
+                            IsEnabled = list.Any(r => !((Resource)r).IsEmpty),
+                            Command = new DelegateCommand(
+                                () =>
+                                {
+                                    foreach (var resource in list)
+                                    {
+                                        ((Resource)resource).Empty();
+                                    }
+
+                                    vm.IsDirty = true;
+                                    RefreshDirtyFlag(vm.Parent);
+                                })
+                        });
+                }
+
+                if (itemType == typeof(Vessel))
+                {
+                    menu.Items.Add(
+                        new MenuItem()
+                        {
+                            Header = "Fill",
+                            IsEnabled = list.Any(v => ((Vessel)v).Parts.Where(p => p.Resources != null && p.Resources.Count > 0).Any(p => p.Resources.Any(r => !r.IsFull))),
+                            Command = new DelegateCommand(
+                                () =>
+                                {
+                                    foreach (var vessel in list)
+                                    {
+                                        ((Vessel)vessel).FillResources();
+                                    }
+
+                                    vm.IsDirty = true;
+                                    RefreshDirtyFlag(vm.Parent);
+                                })
+                        });
+
+                    menu.Items.Add(
+                        new MenuItem()
+                        {
+                            Header = "Empty",
+                            IsEnabled = list.Any(v => ((Vessel)v).Parts.Where(p => p.Resources != null && p.Resources.Count > 0).Any(p => p.Resources.Any(r => !r.IsEmpty))),
+                            Command = new DelegateCommand(
+                                () =>
+                                {
+                                    foreach (var vessel in list)
+                                    {
+                                        ((Vessel)vessel).EmptyResources();
+                                    }
+
+                                    vm.IsDirty = true;
+                                    RefreshDirtyFlag(vm.Parent);
+                                })
+                        });
+                }
+
+                item.ContextMenu = menu.Items.Count > 0 ? menu : new ContextMenu() { Visibility = Visibility.Hidden };
 
                 return;
             }
 
+            // KerbalDataObjectViewModel - Individual Tree Obeject
             if (obj.GetType() ==  typeof(KerbalDataObjectViewModel))
             {
-                var menu = new ContextMenu();
-                menu.Items.Add(new MenuItem() { Header = "KerbalDataObjectViewModel Items" });
-                item.ContextMenu = menu;
+                var vm = (TreeViewItemViewModel)obj;
+                var kdo = vm.Object;
+                var kdoType = kdo.GetType();
 
-                return;
+                var menu = new ContextMenu();
+
+                // Save File Types
+                if (kdoType == typeof(Resource))
+                {
+                    var resource = (Resource)kdo;
+
+                    menu.Items.Add(
+                        new MenuItem()
+                        {
+                            Header = "Fill",
+                            IsEnabled = !resource.IsFull,
+                            Command = new DelegateCommand(
+                                () =>
+                                {
+                                    resource.Fill();
+
+                                    vm.IsDirty = true;
+                                    RefreshDirtyFlag(vm.Parent);
+                                })
+                        });
+
+                    menu.Items.Add(
+                        new MenuItem()
+                        {
+                            Header = "Empty",
+                            IsEnabled = !resource.IsEmpty,
+                            Command = new DelegateCommand(
+                                () =>
+                                {
+                                    resource.Empty();
+
+                                    vm.IsDirty = true;
+                                    RefreshDirtyFlag(vm.Parent);
+                                })
+                        });
+
+                    item.ContextMenu = menu.Items.Count > 0 ? menu : new ContextMenu() { Visibility = Visibility.Hidden };
+
+                    return;
+                }
+
+                if (kdoType == typeof(FlightState))
+                {
+                    var fs = (FlightState)kdo;
+
+                    menu.Items.Add(
+                        new MenuItem()
+                        {
+                            Header = "Fill Resources",
+                            IsEnabled = fs.Vessels.Any(v => ((Vessel)v).Parts.Where(p => p.Resources != null && p.Resources.Count > 0).Any(p => p.Resources.Any(r => !r.IsFull))),
+                            Command = new DelegateCommand(
+                                () =>
+                                {
+                                    fs.FillResources();
+
+                                    vm.IsDirty = true;
+                                    RefreshDirtyFlag(vm.Parent);
+                                })
+                        });
+
+                    menu.Items.Add(
+                        new MenuItem()
+                        {
+                            Header = "Empty Resources",
+                            IsEnabled = fs.Vessels.Any(v => ((Vessel)v).Parts.Where(p => p.Resources != null && p.Resources.Count > 0).Any(p => p.Resources.Any(r => !r.IsEmpty))),
+                            Command = new DelegateCommand(
+                                () =>
+                                {
+                                    fs.EmptyResources();
+
+                                    vm.IsDirty = true;
+                                    RefreshDirtyFlag(vm.Parent);
+                                })
+                        });
+
+                    item.ContextMenu = menu.Items.Count > 0 ? menu : new ContextMenu() { Visibility = Visibility.Hidden };
+
+                    return;
+                }
+
+                if (kdoType == typeof(Vessel))
+                {
+                    var vessel = (Vessel)kdo;
+
+                    menu.Items.Add(
+                        new MenuItem()
+                        {
+                            Header = "Fill Resources",
+                            IsEnabled = vessel.Parts.Where(p => p.Resources != null && p.Resources.Count > 0).Any(p => p.Resources.Any(r => !r.IsFull)),
+                            Command = new DelegateCommand(
+                                () =>
+                                {
+                                    vessel.FillResources();
+
+                                    vm.IsDirty = true;
+                                    RefreshDirtyFlag(vm.Parent);
+                                })
+                        });
+
+                    menu.Items.Add(
+                        new MenuItem()
+                        {
+                            Header = "Empty Resources",
+                            IsEnabled = vessel.Parts.Where(p => p.Resources != null && p.Resources.Count > 0).Any(p => p.Resources.Any(r => !r.IsEmpty)),
+                            Command = new DelegateCommand(
+                                () =>
+                                {
+                                    vessel.EmptyResources();
+
+                                    vm.IsDirty = true;
+                                    RefreshDirtyFlag(vm.Parent);
+                                })
+                        });
+
+                    item.ContextMenu = menu.Items.Count > 0 ? menu : new ContextMenu() { Visibility = Visibility.Hidden };
+
+                    return;
+                }
+
+                if (kdoType == typeof(Part))
+                {
+                    var part = (Part)kdo;
+
+                    if (part.Resources != null)
+                    {
+                        menu.Items.Add(
+                            new MenuItem()
+                            {
+                                Header = "Fill Resources",
+                                IsEnabled = part.Resources.Any(r => !r.IsFull),
+                                Command = new DelegateCommand(
+                                    () =>
+                                    {
+                                        part.FillResources();
+
+                                        vm.IsDirty = true;
+                                        RefreshDirtyFlag(vm.Parent);
+                                    })
+                            });
+
+                        menu.Items.Add(
+                            new MenuItem()
+                            {
+                                Header = "Empty Resources",
+                                IsEnabled = part.Resources.Any(r => !r.IsEmpty),
+                                Command = new DelegateCommand(
+                                    () =>
+                                    {
+                                        part.EmptyResources();
+
+                                        vm.IsDirty = true;
+                                        RefreshDirtyFlag(vm.Parent);
+                                    })
+                            });
+                    }
+
+                    item.ContextMenu = menu.Items.Count > 0 ? menu : new ContextMenu() { Visibility = Visibility.Hidden };
+
+                    return;
+                }
             }
+
+            item.ContextMenu = new ContextMenu() { Visibility = Visibility.Hidden };
         }
 
         private void RefreshDirtyFlag(IViewModel vm)

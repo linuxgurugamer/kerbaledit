@@ -39,6 +39,11 @@ namespace KerbalEdit.ViewModels
 
             type = parent.GetType();
 
+            if (type.IsSubclassOf(typeof(KerbalDataObject)))
+            {
+                ((KerbalDataObject)parent).PropertyChanged += kdo_PropertyChanged;
+            }
+
             Init();
         }
 
@@ -55,12 +60,11 @@ namespace KerbalEdit.ViewModels
             get
             {
                 return property.GetValue(parent, BindingFlags.GetProperty, null, null, null);
-                //return property.GetValue(parent);
             }
+
             set
             {
                 property.SetValue(parent, ConvertInput(property.PropertyType, value), BindingFlags.SetProperty, null, null, null);
-                //property.SetValue(parent, ConvertInput(property.PropertyType, value));
                 OnPropertyChanged("Value", value);
 
                 IsDirty = true;
@@ -195,6 +199,15 @@ namespace KerbalEdit.ViewModels
             }
 
             return null;
+        }
+
+        private void kdo_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == Name)
+            {
+                OnPropertyChanged("Value", Value);
+                IsDirty = true;
+            }
         }
     }
 }
