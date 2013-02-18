@@ -43,11 +43,21 @@ namespace KerbalEdit.Views
             var item = sender as TreeViewItem;
             var obj = item.Header;
 
+            var vm = obj as TreeViewItemViewModel;
+
+            // This prevents invalid calls and errornous calls like when a user rightclicks on the expansion arrorw.
+            if (vm == null)            {
+                item.ContextMenu = new ContextMenu() { Visibility = Visibility.Hidden };
+                return; 
+            }
+
+            vm.InitData();
+
             // StorableObjectsViewModel{T} - List of Tree Obejects that can be stored/saved
             if (obj.GetType().IsGenericType 
                 && obj.GetType().GetGenericTypeDefinition() == typeof(StorableObjectsViewModel<>))
             {
-                var vm = (TreeViewItemViewModel)obj;
+                //var vm = (TreeViewItemViewModel)obj;
                 var menu = new ContextMenu();
 
                 menu.Items.Add(
@@ -78,7 +88,7 @@ namespace KerbalEdit.Views
             if (obj.GetType().IsGenericType
                 && obj.GetType().GetGenericTypeDefinition() == typeof(StorableObjectViewModel<>))
             {
-                var vm = (TreeViewItemViewModel)obj;
+                //var vm = (TreeViewItemViewModel)obj;
                 var menu = new ContextMenu();
 
                 menu.Items.Add(
@@ -106,8 +116,8 @@ namespace KerbalEdit.Views
             // KerbalDataObjectListViewModel - List of Tree Obejects
             if (obj.GetType() == typeof(KerbalDataObjectListViewModel))
             {
-                var vm = (KerbalDataObjectListViewModel)obj;
-                var collection = vm.Objects;
+                //var vm = (KerbalDataObjectListViewModel)obj;
+                var collection = ((KerbalDataObjectListViewModel)vm).Objects;
 
                 if (collection.Count == 0)
                 {
@@ -212,7 +222,7 @@ namespace KerbalEdit.Views
             // KerbalDataObjectViewModel - Individual Tree Obeject
             if (obj.GetType() ==  typeof(KerbalDataObjectViewModel))
             {
-                var vm = (TreeViewItemViewModel)obj;
+                //var vm = (TreeViewItemViewModel)obj;
                 var kdo = vm.Object;
                 var kdoType = kdo.GetType();
 
@@ -331,6 +341,20 @@ namespace KerbalEdit.Views
                                 })
                         });
 
+                    menu.Items.Add(new Separator());
+
+                    menu.Items.Add(
+                        new MenuItem()
+                        {
+                            Header = "Change Orbit",
+                            IsEnabled = true,
+                            Command = new DelegateCommand(
+                                () =>
+                                {
+                                    (new ChangeOrbitDialogView(new ChangeOrbitDialogViewModel(vm.Children.Where(c => c.Object is Orbit).FirstOrDefault())) { Owner = this }).ShowDialog();
+                                })
+                        });
+
                     item.ContextMenu = menu.Items.Count > 0 ? menu : new ContextMenu() { Visibility = Visibility.Hidden };
 
                     return;
@@ -372,6 +396,28 @@ namespace KerbalEdit.Views
                                     })
                             });
                     }
+
+                    item.ContextMenu = menu.Items.Count > 0 ? menu : new ContextMenu() { Visibility = Visibility.Hidden };
+
+                    return;
+                }
+
+                if (kdoType == typeof(Orbit))
+                {
+                    var orbit = (Orbit)kdo;
+
+                    menu.Items.Add(
+                        new MenuItem()
+                        {
+                            Header = "Change Orbit",
+                            IsEnabled = true,
+                            Command = new DelegateCommand(
+                                () =>
+                                {
+                                    // The dialog edits the main data model values directly, there is no need to store any pointers here
+                                    (new ChangeOrbitDialogView(new ChangeOrbitDialogViewModel(vm)) { Owner = this }).ShowDialog();
+                                })
+                        });
 
                     item.ContextMenu = menu.Items.Count > 0 ? menu : new ContextMenu() { Visibility = Visibility.Hidden };
 

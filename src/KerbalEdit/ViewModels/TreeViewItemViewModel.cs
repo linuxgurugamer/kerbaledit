@@ -120,12 +120,7 @@ using KerbalData;
                     ((TreeViewItemViewModel)parent).IsExpanded = true;
                 }
 
-                // Lazy load the child items, if necessary.
-                if (this.HasDummyChild)
-                {
-                    Children.Remove(DummyChild);
-                    LoadChildren();
-                }
+                InitData();
             }
         }
 
@@ -199,6 +194,15 @@ using KerbalData;
                 {
                     parent.IsDirty = true;
                 }
+            }
+        }
+
+        public void InitData()
+        {
+            if (this.HasDummyChild)
+            {
+                Children.Remove(DummyChild);
+                LoadChildren();
             }
         }
 

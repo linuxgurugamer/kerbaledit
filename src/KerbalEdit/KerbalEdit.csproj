@@ -63,6 +63,7 @@
     </ApplicationDefinition>
     <Compile Include="KerbalEditException.cs" />
     <Compile Include="ViewModels\BaseWindowViewModel.cs" />
+    <Compile Include="ViewModels\ChangeOrbitDialogViewModel.cs" />
     <Compile Include="ViewModels\ICommandViewModel.cs" />
     <Compile Include="ViewModels\ISelectedViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
@@ -76,11 +77,18 @@
     <Compile Include="ViewModels\TreeViewItemViewModel.cs" />
     <Compile Include="ViewModels\UnMappedPropertyViewModel.cs" />
     <Compile Include="ViewModels\Commands\BuildContextCommandsDataCommand.cs" />
+    <Compile Include="Views\ChangeOrbitDialogView.xaml.cs">
+      <DependentUpon>ChangeOrbitDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Converters\ChangedItemBackgroundConverter.cs" />
     <Compile Include="Views\Converters\IsDirtyFontStyleConverter.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\ChangeOrbitDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

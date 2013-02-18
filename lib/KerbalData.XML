@@ -2048,18 +2048,37 @@
             Orbit data model
             </summary>
         </member>
-        <member name="M:KerbalData.Models.Orbit.Change(KerbalData.Models.Body)">
+        <member name="M:KerbalData.Models.Orbit.Change(KerbalData.Models.Body,System.Int64)">
             <summary>
             Changes the orbit configuration based upon the provided body. Target orbit is ~100km from surface. 
             MET should be changed if more than one craft are placed in orbit around the same body. Otherwise craft may spawn too close and collide.
             </summary>
             <param name="body">desired body to orbit</param>
-            <returns>true=success;false=failure</returns>
+            <param name="altitude">desired altitude</param>
+        </member>
+        <member name="P:KerbalData.Models.Orbit.AltitudeOffsets">
+            <summary>
+            Gets the built in data set used for calulating offsets.
+            </summary>
+            <remarks>Data is not loaded from a file, this is how the <see cref="T:KerbalData.Models.Orbit"/> class calulates offsets. This value is provided for end developers in making UI and input validation methods.</remarks>
+        </member>
+        <member name="P:KerbalData.Models.Orbit.Body">
+            <summary>
+            Gets or sets the reference body.
+            This is the reccomended method to update the reference body.
+            </summary>
+        </member>
+        <member name="P:KerbalData.Models.Orbit.Altitude">
+            <summary>
+            Gets or sets the altitude above the reference body 
+            </summary>
+            <remarks>Using this value automatically handles the correct offsets and sets the Sma value as the game expects. Set/Get the desired altitude. Note: offsets do not take terrian into account and are set at ~sea level for each body.</remarks>
         </member>
         <member name="P:KerbalData.Models.Orbit.Sma">
             <summary>
             Gets or sets SMA. - File Property: SMA
             </summary>
+            <remarks>for setting the craft's altitude the decimal property named Altitude is a better option</remarks>
         </member>
         <member name="P:KerbalData.Models.Orbit.Ecc">
             <summary>
@@ -2099,12 +2118,6 @@
         <member name="P:KerbalData.Models.Orbit.Obj">
             <summary>
             Gets or sets the obj. - File Property: OBJ
-            </summary>
-        </member>
-        <member name="P:KerbalData.Models.Orbit.Body">
-            <summary>
-            Gets or sets the reference body.
-            This is the reccomended method to update the reference body.
             </summary>
         </member>
         <member name="T:KerbalData.Models.Part">

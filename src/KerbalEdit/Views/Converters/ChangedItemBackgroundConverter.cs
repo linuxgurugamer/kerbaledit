@@ -26,7 +26,7 @@ namespace KerbalEdit.Views.Converters
                 return Brushes.White;
             }
 
-            return (bool)value ? Brushes.WhiteSmoke : Brushes.White;
+            return (bool)value ? Brushes.LightGoldenrodYellow : Brushes.White;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

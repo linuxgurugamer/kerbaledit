@@ -17,7 +17,7 @@
             </TextBlock>
         </HierarchicalDataTemplate>
     </Window.Resources>
-    <Grid>
+    <Grid Name="workspace">
         <TextBox HorizontalAlignment="Left" Height="28" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="999" Text="{Binding Path=InstallPath}" />
         <Button Content="Load" HorizontalAlignment="Left" Margin="1062,10,0,0" VerticalAlignment="Top" Width="35"/>
         <Button Content="Folder" HorizontalAlignment="Left" Margin="1014,10,0,0" VerticalAlignment="Top" Width="43" Command="{Binding Path=OpenKspInstallFolderCommand}" />
