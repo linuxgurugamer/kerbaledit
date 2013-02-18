@@ -5,9 +5,6 @@
         xmlns:vm="clr-namespace:KerbalEdit.ViewModels"
         xmlns:c="clr-namespace:KerbalEdit.Views.Converters"
         Title="KerbalEdit - Take control of your KSP Data" Height="768" Width="1360">
-    <Window.DataContext>
-        <vm:MainWindowViewModel />
-    </Window.DataContext>  
     <Window.Resources>
         <c:IsDirtyFontStyleConverter x:Key="isDirtyFontStyleConverter" /> 
         <c:ChangedItemBackgroundConverter x:Key="changedItemBackgroundConverter" />

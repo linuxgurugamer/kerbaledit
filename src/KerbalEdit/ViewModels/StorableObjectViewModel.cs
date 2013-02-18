@@ -18,9 +18,11 @@ namespace KerbalEdit.ViewModels
     /// <summary>
     /// TODO: Class Summary
     /// </summary>
-    public class StorableObjectViewModel<T> : KerbalDataObjectViewModel where T : class, IStorable, new()
+    public class StorableObjectViewModel<T> : KerbalDataObjectViewModel, ISelectedViewModel where T : class, IStorable, new()
     {
         private bool childrenLoaded;
+        private StorableObjects<T> objects;
+        private IViewModel selectedItem;
 
         //private T obj;
         /// <summary>
@@ -73,6 +75,21 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        public IViewModel SelectedItem
+        {
+            get
+            {
+                return selectedItem;
+            }
+
+            set
+            {
+                selectedItem = value;
+                OnPropertyChanged("SelectedItem", selectedItem);
+            }
+        }
+
+
         protected override void LoadChildren()
         {
             if (childrenLoaded)
@@ -105,7 +122,20 @@ namespace KerbalEdit.ViewModels
                 }
             }
 
+            // If the type for the object data contains storable collections, add them to children for user access.
+            var props = Object.GetType().GetProperties().Where(p => p.PropertyType.FullName.Contains("StorableObjects"));
+            
+            foreach (var prop in props)
+            {
+                var propArgs = prop.PropertyType.GetGenericArguments();
+                var createVmMetod = typeof(StorableObjectsViewModel<>).MakeGenericType(propArgs).GetConstructor(new Type[] { typeof(StorableObjects<>).MakeGenericType(propArgs), typeof(string), typeof(ISelectedViewModel) });
+
+                var vm = createVmMetod.Invoke(new object[] { prop.GetValue(Object, BindingFlags.GetProperty, null, null, null), prop.Name, this });
+                Children.Add((TreeViewItemViewModel)vm);
+            }
+
             childrenLoaded = true;
         }
+
     }
 }

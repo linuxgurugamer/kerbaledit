@@ -25,7 +25,6 @@ namespace KerbalEdit.ViewModels
     {
         private readonly ObservableCollection<TreeViewItemViewModel> objects; 
         private KerbalData kd;
-        //private ISelectedViewModel parent;
         private IViewModel selectedItem;
 
         private bool isDirty;

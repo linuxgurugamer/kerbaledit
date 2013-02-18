@@ -29,12 +29,15 @@ namespace KerbalEdit.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainWindowViewModel windowVm;
         // NOTE: I still don't really have the hang of TreeView and how to wireup a dynamic context model. The idea was to avoid repition in eith XAML or CS but that is not the case right now
         // It looks like Blend or a different pattern would be a better choice. This can be hard to read but it works for now. 
         // Some of this should be fixed by changed to the Models in KerbalData's ConsumerAPI
 
         public MainWindow()
         {
+            windowVm = new MainWindowViewModel();
+            DataContext = windowVm;
             InitializeComponent();
         }
 
@@ -130,8 +133,9 @@ namespace KerbalEdit.Views
                         Command = new DelegateCommand(
                             () =>
                             {
-                                var registry = ((KerbalDataViewModel)((TreeViewItemViewModel)vm.Parent).Parent).Data.ProcRegistry;
-                                (new ExportDataDialogView(new ExportDataDialogViewModel((IStorable)vm.Object, registry)) { Owner = this }).ShowDialog();
+                                //var registry = 
+                                //var registry = ((KerbalDataViewModel)((TreeViewItemViewModel)vm.Parent).Parent).Data.ProcRegistry;
+                                (new ExportDataDialogView(new ExportDataDialogViewModel((IStorable)vm.Object, windowVm.Data.Data.ProcRegistry)) { Owner = this }).ShowDialog();
                             })
                     });
 
