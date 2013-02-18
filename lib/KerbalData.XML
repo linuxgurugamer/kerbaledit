@@ -854,6 +854,11 @@
             Gets and sets module collection. - File Property: MODULE
             </summary>
         </member>
+        <member name="T:KerbalData.IStorableObjects">
+            <summary>
+            TODO: Interface Summary
+            </summary>
+        </member>
         <member name="T:KerbalData.IKerbalDataManager">
             <summary>
             Base interface for top-level consumer API classes. Allows consumers to create custom models that leverage API features.

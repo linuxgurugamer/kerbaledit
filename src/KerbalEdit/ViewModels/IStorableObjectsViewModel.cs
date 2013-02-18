@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="TreeViewCommand.cs" company="OpenSauceSolutions">
+// <copyright file="IIStorableObjectsViewModel.cs" company="OpenSauceSolutions">
 // © 2013 OpenSauce Solutions
 // </copyright>
 // -----------------------------------------------------------------------
@@ -10,12 +10,14 @@ namespace KerbalEdit.ViewModels
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+using KerbalData;
 
     /// <summary>
-    /// TODO: Class Summary
+    /// TODO: Interface Summary
     /// </summary>
-    public class TreeViewCommandViewModel : ICommandViewModel
+    public interface IStorableObjectsViewModel
     {
-
+        IStorableObjects Objects { get; }
+        void Refresh();
     }
 }

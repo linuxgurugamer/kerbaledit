@@ -88,7 +88,6 @@ namespace KerbalEdit.Views
             if (obj.GetType().IsGenericType
                 && obj.GetType().GetGenericTypeDefinition() == typeof(StorableObjectViewModel<>))
             {
-                //var vm = (TreeViewItemViewModel)obj;
                 var menu = new ContextMenu();
 
                 menu.Items.Add(
@@ -108,6 +107,34 @@ namespace KerbalEdit.Views
                             })
                     });
 
+                menu.Items.Add(
+                    new MenuItem()
+                    {
+                        Header = "Save As",
+                        IsEnabled = true,
+                        Command = new DelegateCommand(
+                            () =>
+                            {
+                                (new SaveAsDialogView(new SaveAsDialogViewModel((IStorable)vm.Object)) { Owner = this }).ShowDialog();
+                                ((IStorableObjectsViewModel)((TreeViewItemViewModel)vm.Parent)).Refresh();
+                            })
+                    });
+
+                menu.Items.Add(new Separator());
+
+                menu.Items.Add(
+                    new MenuItem()
+                    {
+                        Header = "Export",
+                        IsEnabled = true,
+                        Command = new DelegateCommand(
+                            () =>
+                            {
+                                var registry = ((KerbalDataViewModel)((TreeViewItemViewModel)vm.Parent).Parent).Data.ProcRegistry;
+                                (new ExportDataDialogView(new ExportDataDialogViewModel((IStorable)vm.Object, registry)) { Owner = this }).ShowDialog();
+                            })
+                    });
+
                 item.ContextMenu = menu.Items.Count > 0 ? menu : new ContextMenu() { Visibility = Visibility.Hidden };
 
                 return;
@@ -116,7 +143,6 @@ namespace KerbalEdit.Views
             // KerbalDataObjectListViewModel - List of Tree Obejects
             if (obj.GetType() == typeof(KerbalDataObjectListViewModel))
             {
-                //var vm = (KerbalDataObjectListViewModel)obj;
                 var collection = ((KerbalDataObjectListViewModel)vm).Objects;
 
                 if (collection.Count == 0)
@@ -222,7 +248,6 @@ namespace KerbalEdit.Views
             // KerbalDataObjectViewModel - Individual Tree Obeject
             if (obj.GetType() ==  typeof(KerbalDataObjectViewModel))
             {
-                //var vm = (TreeViewItemViewModel)obj;
                 var kdo = vm.Object;
                 var kdoType = kdo.GetType();
 
@@ -296,6 +321,30 @@ namespace KerbalEdit.Views
                                 () =>
                                 {
                                     fs.EmptyResources();
+
+                                    vm.IsDirty = true;
+                                    RefreshDirtyFlag(vm.Parent);
+                                })
+                        });
+
+                    menu.Items.Add(new Separator());
+
+                    menu.Items.Add(
+                        new MenuItem()
+                        {
+                            Header = "Clear Debris/Unknown",
+                            IsEnabled = true,
+                            Command = new DelegateCommand(
+                                () =>
+                                {
+                                    fs.ClearDebris();
+
+                                    var parent =  (TreeViewItemViewModel)vm.Parent;
+                                    var vmo = vm.Object;
+
+                                    parent.Children.Remove(vm);
+                                    vm = new KerbalDataObjectViewModel(parent, vmo);
+                                    parent.Children.Add(vm);
 
                                     vm.IsDirty = true;
                                     RefreshDirtyFlag(vm.Parent);

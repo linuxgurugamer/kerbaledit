@@ -16,7 +16,7 @@ namespace KerbalEdit.ViewModels
     /// <summary>
     /// TODO: Class Summary
     /// </summary>
-    public class StorableObjectsViewModel<T> : TreeViewItemViewModel where T : class, IStorable, new()
+    public class StorableObjectsViewModel<T> : TreeViewItemViewModel, IStorableObjectsViewModel where T : class, IStorable, new()
     {
         private StorableObjects<T> objects;
  
@@ -29,7 +29,18 @@ namespace KerbalEdit.ViewModels
             this.objects = objects;
         }
 
-        public StorableObjects<T> Objects { get { return objects; } }
+        public IStorableObjects Objects { get { return objects; } }
+
+        public void Refresh()
+        {
+            foreach (var name in Objects.Names)
+            {
+                if (!Children.Any(c => c.DisplayName == name))
+                {
+                    base.Children.Add(new StorableObjectViewModel<T>(name, this));
+                }
+            }
+        }
 
         protected override void LoadChildren()
         {

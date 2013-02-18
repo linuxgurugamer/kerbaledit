@@ -64,7 +64,9 @@
     <Compile Include="KerbalEditException.cs" />
     <Compile Include="ViewModels\BaseWindowViewModel.cs" />
     <Compile Include="ViewModels\ChangeOrbitDialogViewModel.cs" />
+    <Compile Include="ViewModels\ExportDataDialogViewModel.cs" />
     <Compile Include="ViewModels\ICommandViewModel.cs" />
+    <Compile Include="ViewModels\IStorableObjectsViewModel.cs" />
     <Compile Include="ViewModels\ISelectedViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
     <Compile Include="ViewModels\KerbalDataObjectListViewModel.cs" />
@@ -72,6 +74,7 @@
     <Compile Include="ViewModels\KerbalDataViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MappedPropertyViewModel.cs" />
+    <Compile Include="ViewModels\SaveAsDialogViewModel.cs" />
     <Compile Include="ViewModels\StorableObjectsViewModel.cs" />
     <Compile Include="ViewModels\StorableObjectViewModel.cs" />
     <Compile Include="ViewModels\TreeViewItemViewModel.cs" />
@@ -80,12 +83,23 @@
     <Compile Include="Views\ChangeOrbitDialogView.xaml.cs">
       <DependentUpon>ChangeOrbitDialogView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Converters\BooleanVisbilityConverter.cs" />
     <Compile Include="Views\Converters\ChangedItemBackgroundConverter.cs" />
     <Compile Include="Views\Converters\IsDirtyFontStyleConverter.cs" />
+    <Compile Include="Views\ExportDataDialogView.xaml.cs">
+      <DependentUpon>ExportDataDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SaveAsDialogView.xaml.cs">
+      <DependentUpon>SaveAsDialogView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\ChangeOrbitDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExportDataDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -97,6 +111,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\SaveAsDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="netfx\System\Guard.cs" />

@@ -49,7 +49,7 @@ namespace KerbalEdit.ViewModels
             {
                 if (base.Object == null)
                 {
-                    Object = ((StorableObjectsViewModel<T>)Parent).Objects[DisplayName];
+                    Object = ((StorableObjects<T>)((StorableObjectsViewModel<T>)Parent).Objects)[DisplayName];
                 }
 
                 return base.Object;
@@ -87,7 +87,6 @@ namespace KerbalEdit.ViewModels
                 if (prop.PropertyType.GetInterfaces().Any(i => i.FullName.Contains("IKerbalDataObject")))
                 {
                     var obj = (IKerbalDataObject)prop.GetValue(Object, BindingFlags.GetProperty, null, null, null);
-                    //var obj = (IKerbalDataObject)prop.GetValue(Object);
 
                     if (obj != null)
                     {   
@@ -98,7 +97,6 @@ namespace KerbalEdit.ViewModels
                 if (prop.PropertyType.IsGenericType && (prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>)))
                 {
                     var val = prop.GetValue(Object, BindingFlags.GetProperty, null, null, null);
-                    //var val = prop.GetValue(Object);
 
                     if (val != null && val.GetType().GetGenericArguments()[0].GetInterfaces().Contains(typeof(IKerbalDataObject)))
                     {
