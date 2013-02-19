@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KerbalEdit", "src\KerbalEdit\KerbalEdit.csproj", "{390BC098-6860-40D5-BCC3-834898707119}"
 EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "KerbalEdit.Docs", "src\KerbalEdit.Docs\KerbalEdit.Docs.shfbproj", "{19FA955B-1F30-4CDC-8C38-F21D982D463A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{390BC098-6860-40D5-BCC3-834898707119}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{390BC098-6860-40D5-BCC3-834898707119}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{390BC098-6860-40D5-BCC3-834898707119}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19FA955B-1F30-4CDC-8C38-F21D982D463A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19FA955B-1F30-4CDC-8C38-F21D982D463A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19FA955B-1F30-4CDC-8C38-F21D982D463A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19FA955B-1F30-4CDC-8C38-F21D982D463A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
