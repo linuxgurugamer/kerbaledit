@@ -11,27 +11,30 @@ namespace KerbalEdit.ViewModels
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using System.Text;
+
     using KerbalData;
-    using KerbalData.Models;
 
     /// <summary>
-    /// TODO: Class Summary
+    /// Model to support a <see cref="IStorable"/> object instance
     /// </summary>
     public class StorableObjectViewModel<T> : KerbalDataObjectViewModel, ISelectedViewModel where T : class, IStorable, new()
     {
         private bool childrenLoaded;
-        private StorableObjects<T> objects;
+        //private StorableObjects<T> objects;
         private IViewModel selectedItem;
 
-        //private T obj;
         /// <summary>
-        /// Initializes a new instance of the <see cref="StorableObjectViewModel" /> class.
+        /// Initializes a new instance of the <see cref="StorableObjectViewModel{T}" /> class.
         /// </summary>	
+        /// <param name="displayName">name to display on ui elements</param>
+        /// <param name="parent">parent instance managing this instance</param>
         public StorableObjectViewModel(string displayName, StorableObjectsViewModel<T> parent) : base(displayName, parent)
         {
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the instance has been selected
+        /// </summary>
         public override bool IsSelected
         {
             get
@@ -45,6 +48,9 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the data object instance used by the model
+        /// </summary>
         public override IKerbalDataObject Object
         {
             get
@@ -62,6 +68,9 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the type for the underlying data object.
+        /// </summary>
         public override Type ObjectType
         {
             get
@@ -75,6 +84,9 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the pointer to the child item that has been selected
+        /// </summary>
         public IViewModel SelectedItem
         {
             get
@@ -89,7 +101,9 @@ namespace KerbalEdit.ViewModels
             }
         }
 
-
+        /// <summary>
+        /// Handles loading of children in lazy load scenarios
+        /// </summary>
         protected override void LoadChildren()
         {
             if (childrenLoaded)

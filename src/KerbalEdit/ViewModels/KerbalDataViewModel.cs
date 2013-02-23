@@ -10,16 +10,12 @@ namespace KerbalEdit.ViewModels
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.Linq;
-    using System.Text;
-
-    using Newtonsoft.Json.Linq;
 
     using KerbalData;
     using KerbalData.Models;
 
     /// <summary>
-    /// TODO: Class Summary
+    /// Top level model for mapping KSP data.
     /// </summary>
     public sealed class KerbalDataViewModel : ISelectedViewModel, INotifyPropertyChanged, IDisposable
     {
@@ -48,6 +44,9 @@ namespace KerbalEdit.ViewModels
             });
         }
 
+        /// <summary>
+        /// Gets the core <see cref="KerbalData"/> instance driving all data transactions. 
+        /// </summary>
         public KerbalData Data
         {
             get
@@ -56,11 +55,17 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the parent - Always null, <see cref="KerbalDataViewModel"/> is top level for bound KSP data. 
+        /// </summary>
         public IViewModel Parent
         {
             get { return null; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the <see cref="KerbalData"/> instance or any of it's child data has changed since load or last save.
+        /// </summary>
         public bool IsDirty
         {
             get
@@ -74,10 +79,17 @@ namespace KerbalEdit.ViewModels
             }
         }
 
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        /// <summary>
+        /// Gets the collection of top level models for each type of data file as mapped from the <see cref="KerbalData"/> instance
+        /// </summary>
+        public ObservableCollection<TreeViewItemViewModel> Objects
+        {
+            get { return objects; }
+        }
 
-        public ObservableCollection<TreeViewItemViewModel> Objects { get { return objects; } }
-
+        /// <summary>
+        /// Gets or sets the item instance that has been selected.
+        /// </summary>
         public IViewModel SelectedItem
         {
             get
@@ -92,19 +104,30 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Event hook for property change notifications on this objects properties.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Disposes of object and it's child instances
+        /// </summary>
+        /// <remarks>
+        /// <para>This is part of an attempt to handle a memory leak with the view model pattern at present, this is to be corrected and removed.</para>
+        /// </remarks>
+        public void Dispose()
+        {
+            objects.Clear();
+            kd = null;
+            selectedItem = null;
+        }
+
         private void OnPropertyChanged(string name, object value = null)
         {
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
-        }
-
-        public void Dispose()
-        {
-            objects.Clear();
-            kd = null;
-            selectedItem = null;
         }
     }
 }

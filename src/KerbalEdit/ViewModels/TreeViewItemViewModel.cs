@@ -7,18 +7,16 @@
 namespace KerbalEdit.ViewModels
 {
     using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.Linq;
-    using System.Text;
-using KerbalData;
+    
+    using KerbalData;
 
     /// <summary>
     /// Base class for all ViewModel classes displayed by TreeViewItems.  
     /// This acts as an adapter between a raw data object and a TreeViewItem.
     /// </summary>
-    public class TreeViewItemViewModel : IViewModel, INotifyPropertyChanged
+    public class TreeViewItemViewModel : IViewModel
     {   
         private static readonly TreeViewItemViewModel DummyChild = new TreeViewItemViewModel();
 
@@ -30,6 +28,12 @@ using KerbalData;
         private bool isExpanded, isSelected, isDirty;
         private string displayName, toolTip;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TreeViewItemViewModel" /> class.
+        /// </summary>	
+        /// <param name="displayName">UI display name to use</param>
+        /// <param name="parent">parent model instance</param>
+        /// <param name="lazyLoadChildren">should children objects be lazy or actively loaded</param>
         protected TreeViewItemViewModel(string displayName, IViewModel parent = null, bool lazyLoadChildren = true)
         {
             DisplayName = displayName;
@@ -46,6 +50,9 @@ using KerbalData;
         {
         }
 
+        /// <summary>
+        /// Gets the data object instance managed by the model
+        /// </summary>
         public virtual IKerbalDataObject Object
         {
             get 
@@ -60,6 +67,9 @@ using KerbalData;
             }
         }
 
+        /// <summary>
+        /// Gets the type of the data object managed by the model
+        /// </summary>
         public virtual Type ObjectType
         {
             get 
@@ -73,6 +83,9 @@ using KerbalData;
             }
         }
 
+        /// <summary>
+        /// Gets or sets the UI display name of the model
+        /// </summary>
         public string DisplayName
         {
             get
@@ -86,6 +99,10 @@ using KerbalData;
             }
         }
 
+        /// <summary>
+        /// Gets or sets the UI tool tip of the model
+        /// </summary>
+        /// <remarks>Not currently used</remarks>
         public string ToolTip
         {
             get
@@ -124,28 +141,12 @@ using KerbalData;
             }
         }
 
-        protected void RemoveDummyChild()
-        {
-            if (HasDummyChild)
-            {
-                Children.Remove(DummyChild);
-            }
-        }
-
         /// <summary>
         /// Returns true if this object's Children have not yet been populated.
         /// </summary>
         public bool HasDummyChild
         {
             get { return Children.Count == 1 && Children[0] == DummyChild; }
-        }
-
-        protected virtual void OnSelectedItemChanged(TreeViewItemViewModel item)
-        {
-            if (TreeParent != null)
-            {
-                TreeParent.OnSelectedItemChanged(item);
-            }
         }
 
         /// <summary>
@@ -197,13 +198,39 @@ using KerbalData;
             }
         }
 
+        /// <summary>
+        /// Get's the parent model instance  as a Tree object if relevant
+        /// </summary>
+        public TreeViewItemViewModel TreeParent
+        {
+            get { return parent as TreeViewItemViewModel; }
+        }
+
+        /// <summary>
+        /// Gets the parent view model instance
+        /// </summary>
+        public IViewModel Parent
+        {
+            get { return parent; }
+        }
+
+        /// <summary>
+        /// Event hook for property change events. 
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Initializes data when lazy loading is enabled
+        /// </summary>
         public void InitData()
         {
-            if (this.HasDummyChild)
+            if (!HasDummyChild)
             {
-                Children.Remove(DummyChild);
-                LoadChildren();
+                return;
             }
+
+            Children.Remove(DummyChild);
+            LoadChildren();
         }
 
         /// <summary>
@@ -214,19 +241,34 @@ using KerbalData;
         {
         }
 
-        
-        public TreeViewItemViewModel TreeParent
+        /// <summary>
+        /// Internal method to allow parents to force loading when lazy loading is enabled under certain conditions.
+        /// </summary>
+        protected void RemoveDummyChild()
         {
-            get { return parent as TreeViewItemViewModel; }
+            if (HasDummyChild)
+            {
+                Children.Remove(DummyChild);
+            }
         }
 
-        public IViewModel Parent
+        /// <summary>
+        /// Base selected item method, used to bubble up to all objects related to the selected item
+        /// </summary>
+        /// <param name="item">item instance that has been selected</param>
+        protected virtual void OnSelectedItemChanged(TreeViewItemViewModel item)
         {
-            get { return parent; }
+            if (TreeParent != null)
+            {
+                TreeParent.OnSelectedItemChanged(item);
+            }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        /// <summary>
+        /// Base property changed implementation using standard pattern. 
+        /// </summary>
+        /// <param name="propertyName">name of value that has changed</param>
+        /// <param name="value">instance or value that has changed.</param>
         protected virtual void OnPropertyChanged(string propertyName, object value = null)
         {
             if (PropertyChanged != null)

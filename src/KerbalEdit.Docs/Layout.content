@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="5b300701-1194-4ae8-a5ef-f4ffc719851c" visible="True" noFile="true" isDefault="true" isExpanded="true" title="Welcome to KerbalEdit" tocTitle="Welcome to KerbalEdit" linkText="Welcome">
+  <Topic id="5b300701-1194-4ae8-a5ef-f4ffc719851c" visible="True" noFile="true" isExpanded="true" title="Welcome to KerbalEdit" tocTitle="Welcome to KerbalEdit" linkText="Welcome">
     <Topic id="fc19a524-9690-4a42-852b-cf885d6f944a" visible="True" title="What is KerbalEdit?" tocTitle="What is KerbalEdit?" linkText="What is KerbalEdit?" />
-    <Topic id="eaf2c134-b6ef-4a7d-bc0b-30c410e17291" visible="True" isSelected="true" apiParentMode="InsertAfter" title="Quick Start Guide" tocTitle="Quick Start Guide" linkText="Quick Start Guide" />
+    <Topic id="eaf2c134-b6ef-4a7d-bc0b-30c410e17291" visible="True" isDefault="true" title="Quick Start Guide" tocTitle="Quick Start Guide" linkText="Quick Start Guide" />
+    <Topic id="cc1e69f8-b816-44bb-8c30-670c672807a1" visible="True" isSelected="true" apiParentMode="InsertAsChild" title="Developer Reference" />
   </Topic>
 </Topics>

@@ -24,7 +24,11 @@
       <DocumentationSource sourceFile="..\KerbalEdit\KerbalEdit.csproj" />
     </DocumentationSources>
     <HelpAttributes />
-    <NamespaceSummaries />
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="KerbalEdit" isDocumented="True">Top level container namespace for the KerbalEdit application. Contains application metadata and base support classes.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="KerbalEdit.ViewModels" isDocumented="True">UI models namespace</NamespaceSummaryItem>
+<NamespaceSummaryItem name="KerbalEdit.Views" isDocumented="True">UI Views namespace</NamespaceSummaryItem>
+<NamespaceSummaryItem name="KerbalEdit.Views.Converters" isDocumented="True">Value converters used by the UI when displaying data.</NamespaceSummaryItem></NamespaceSummaries>
     <PlugInConfigurations />
     <BuildLogFile />
     <HtmlHelp1xCompilerPath />
@@ -39,7 +43,7 @@
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CppCommentsFixup>False</CppCommentsFixup>
     <CleanIntermediates>True</CleanIntermediates>
-    <SyntaxFilters>Standard</SyntaxFilters>
+    <SyntaxFilters>CSharp, VisualBasic, CPlusPlus, XamlUsage</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <PresentationStyle>VS2010</PresentationStyle>
@@ -81,6 +85,7 @@
     <ContentLayout Include="Layout.content" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="DeveloperReference.aml" />
     <None Include="QuickStart.aml" />
     <None Include="WhatIsKerbalEdit.aml" />
   </ItemGroup>

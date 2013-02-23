@@ -41,11 +41,15 @@ using System.Linq.Expressions;
 [DebuggerStepThrough]
 static class Guard
 {
+
     /// <summary>
     /// Ensures the given <paramref name="value"/> is not null.
     /// Throws <see cref="ArgumentNullException"/> otherwise.
     /// </summary>
     /// <exception cref="System.ArgumentException">The <paramref name="value"/> is null.</exception>
+    /// <typeparam name="T">type of value being checked</typeparam>
+    /// <param name="reference">evaluation function reference</param>
+    /// <param name="value"></param>
     public static void NotNull<T>(Expression<Func<T>> reference, T value)
     {
         if (value == null)
@@ -58,12 +62,15 @@ static class Guard
     /// <see cref="ArgumentException"/> in the latter.
     /// </summary>
     /// <exception cref="System.ArgumentException">The <paramref name="value"/> is null or an empty string.</exception>
+    /// <param name="reference">function reference</param>
+    /// <param name="value">value to check</param>
     public static void NotNullOrEmpty(Expression<Func<string>> reference, string value)
     {
         NotNull<string>(reference, value);
         if (value.Length == 0)
             throw new ArgumentException("Parameter cannot be empty.", GetParameterName(reference));
     }
+
 
     /// <summary>
     /// Ensures the given string <paramref name="value"/> is valid according 
@@ -72,6 +79,11 @@ static class Guard
     /// </summary>
     /// <exception cref="System.ArgumentException">The <paramref name="value"/> is not valid according 
     /// to the <paramref name="validate"/> function.</exception>
+    /// <typeparam name="T">type parameter</typeparam>
+    /// <param name="reference">function reference</param>
+    /// <param name="value">value to check</param>
+    /// <param name="validate">validation function</param>
+    /// <param name="message">message to use on failure</param>
     public static void IsValid<T>(Expression<Func<T>> reference, T value, Func<T, bool> validate, string message)
     {
         if (!validate(value))
@@ -80,11 +92,17 @@ static class Guard
 
     /// <summary>
     /// Ensures the given string <paramref name="value"/> is valid according 
-    /// to the <paramref name="validate"/> function. Throws <see cref="ArgumentNullException"/> 
+    /// to the <paramref name="reference"/> function. Throws <see cref="ArgumentNullException"/> 
     /// otherwise.
     /// </summary>
     /// <exception cref="System.ArgumentException">The <paramref name="value"/> is not valid according 
-    /// to the <paramref name="validate"/> function.</exception>
+    /// to the <paramref name="reference"/> function.</exception>
+    /// <typeparam name="T">type parameter</typeparam>
+    /// <param name="reference">function reference</param>
+    /// <param name="value">value to check</param>
+    /// <param name="valid">check function</param>
+    /// <param name="format">value format</param>
+    /// <param name="args">parameters</param>
     public static void IsValid<T>(Expression<Func<T>> reference, T value, Func<T, bool> valid, string format, params object[] args)
     {
         if (!valid(value))

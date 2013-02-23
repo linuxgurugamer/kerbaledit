@@ -6,22 +6,16 @@
 
 namespace KerbalEdit.ViewModels
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.Linq;
-    using System.Reflection;
-    using System.Text;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
     using KerbalData;
-    using KerbalData.Models;
 
-
+    /// <summary>
+    /// Model for a UnMapped Property on a <see cref="IKerbalDataObject"/>
+    /// </summary>
     public class UnMappedPropertyViewModel : INotifyPropertyChanged
     {
         private string key;
@@ -30,6 +24,12 @@ namespace KerbalEdit.ViewModels
 
         private bool isDirty;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MappedPropertyViewModel" /> class.
+        /// </summary>	
+        /// <param name="key">key of the unmapped property</param>
+        /// <param name="parent">object containing the mapped properties</param>
+        /// <param name="viewModelParent">model that manages this instance</param>
         public UnMappedPropertyViewModel(string key, ObservableDictionary<string, JToken> parent, TreeViewItemViewModel viewModelParent)
         {
             Parent = parent;
@@ -38,6 +38,10 @@ namespace KerbalEdit.ViewModels
             this.viewModelParent = viewModelParent;
         }
 
+        /// <summary>
+        /// Gets or sets the key of the unmapped property. 
+        /// </summary>
+        /// <remarks>Unlike mapped properties, unmapped properties are simple dictionary entries which can have key names easily changed. Use unmapped properties to change existing keys and add completely new values to the data. </remarks>
         public string Key
         {
             get
@@ -67,6 +71,9 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the underlying unmapped property value
+        /// </summary>
         public string Value
         {
             get
@@ -83,6 +90,9 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the property has changed since load or last save.
+        /// </summary>
         public bool IsDirty
         {
             get
@@ -102,8 +112,14 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the parent dictionary that contains the property
+        /// </summary>
         public ObservableDictionary<string, JToken> Parent { get; private set; }
 
+        /// <summary>
+        /// Event hook for property change events.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string name, object value = null)

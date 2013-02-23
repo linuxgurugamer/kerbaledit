@@ -6,21 +6,17 @@
 
 namespace KerbalEdit.ViewModels
 {
-    using System;
     using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using KerbalData;
-    using KerbalData.Models;
 
     /// <summary>
-    /// TODO: Class Summary
+    /// Model for a list of <see cref="KerbalDataObject"/>s
     /// </summary>
     public class KerbalDataObjectListViewModel : TreeViewItemViewModel
     {
         private bool childrenLoaded;
-        private ICollection objs;
+        private readonly ICollection objs;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="KerbalDataObjectViewModel" /> class.
         /// </summary>	
@@ -30,11 +26,17 @@ namespace KerbalEdit.ViewModels
             this.objs = objs;
         }
 
+        /// <summary>
+        /// Gets the <see cref="IKerbalDataObject"/>s managed by this model.
+        /// </summary>
         public ICollection Objects
         {
             get { return objs; }
         }
 
+        /// <summary>
+        /// Loads children in lazy, loading scenarios
+        /// </summary>
         protected override void LoadChildren()
         {
             if (childrenLoaded)

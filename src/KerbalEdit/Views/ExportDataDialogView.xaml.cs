@@ -1,25 +1,18 @@
 ﻿namespace KerbalEdit.Views
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Data;
-    using System.Windows.Documents;
-    using System.Windows.Input;
-    using System.Windows.Media;
-    using System.Windows.Media.Imaging;
-    using System.Windows.Shapes;
 
     using ViewModels;
 
     /// <summary>
-    /// Interaction logic for ExportDataDialogView.xaml
+    /// Interaction logic for ExportDataDialogView
     /// </summary>
     public partial class ExportDataDialogView : Window
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MappedPropertyViewModel" /> class.
+        /// </summary>	
+        /// <param name="vm">model instance to use with the view</param>
         public ExportDataDialogView(ExportDataDialogViewModel vm)
         {
             DataContext = vm;

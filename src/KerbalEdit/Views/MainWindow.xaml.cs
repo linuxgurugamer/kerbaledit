@@ -9,15 +9,9 @@ namespace KerbalEdit.Views
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Data;
-    using System.Windows.Documents;
     using System.Windows.Input;
-    using System.Windows.Media;
-    using System.Windows.Media.Imaging;
-    using System.Windows.Shapes;
 
     using KerbalData;
     using KerbalData.Models;
@@ -25,15 +19,22 @@ namespace KerbalEdit.Views
     using ViewModels;
 
     /// <summary>
-    /// TODO: Class Summary
+    /// View class for MainWindow instance
     /// </summary>
-    public partial class MainWindow : Window
+    /// <remarks>
+    /// <para>This class contains all the wire-up for right-click menus on the treeview, this will be moved in later updates as it really should not be here.</para>
+    /// </remarks>
+    public partial class MainWindow
     {
         private MainWindowViewModel windowVm;
-        // NOTE: I still don't really have the hang of TreeView and how to wireup a dynamic context model. The idea was to avoid repition in eith XAML or CS but that is not the case right now
+
+        // NOTE: I still don't really have the hang of TreeView and how to wire-up a dynamic context model. The idea was to avoid repition in eith XAML or CS but that is not the case right now
         // It looks like Blend or a different pattern would be a better choice. This can be hard to read but it works for now. 
         // Some of this should be fixed by changed to the Models in KerbalData's ConsumerAPI
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow" /> class.
+        /// </summary>	
         public MainWindow()
         {
             windowVm = new MainWindowViewModel();

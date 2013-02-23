@@ -6,17 +6,14 @@
 
 namespace KerbalEdit.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using KerbalData;
-
     /// <summary>
-    /// TODO: Interface Summary
+    /// Defines the contract for a class that can be selected. 
     /// </summary>
     public interface ISelectedViewModel : IViewModel
     {
+        /// <summary>
+        /// Gets or sets the viewmodel that is selected.
+        /// </summary>
         IViewModel SelectedItem { get; set; }
     }
 }

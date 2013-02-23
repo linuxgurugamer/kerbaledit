@@ -6,18 +6,21 @@
 
 namespace KerbalEdit.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-using KerbalData;
+    using KerbalData;
 
     /// <summary>
-    /// TODO: Interface Summary
+    /// Data files the contract for data models that can be processed or stored. 
     /// </summary>
     public interface IStorableObjectsViewModel
     {
+        /// <summary>
+        /// Gets the collection data managed by the model
+        /// </summary>
         IStorableObjects Objects { get; }
+
+        /// <summary>
+        /// Refreshes the Objects collection by re-querying the underlying store. Changes to already loaded models should not be overwritten when called.
+        /// </summary>
         void Refresh();
     }
 }

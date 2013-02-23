@@ -6,23 +6,19 @@
 
 namespace KerbalEdit.ViewModels
 {
-    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
-    using System.Text;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
     using KerbalData;
-    using KerbalData.Models;
 
     /// <summary>
-    /// TODO: Class Summary
+    /// Model for a <see cref="KerbalDataObject"/> instance
     /// </summary>
     public class KerbalDataObjectViewModel : TreeViewItemViewModel
     {
@@ -30,6 +26,11 @@ namespace KerbalEdit.ViewModels
         private ObservableCollection<MappedPropertyViewModel> mappedProperties;
         private ObservableCollection<UnMappedPropertyViewModel> unmappedProperties;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KerbalDataObjectViewModel" /> class.
+        /// </summary>	
+        /// <param name="displayName">desired UI display name</param>
+        /// <param name="parent">parent instance to use</param>
         public KerbalDataObjectViewModel(string displayName, TreeViewItemViewModel parent)
             : base(displayName, parent)
         { }
@@ -42,6 +43,9 @@ namespace KerbalEdit.ViewModels
             Object = obj;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the object has been selected.
+        /// </summary>
         public override bool IsSelected
         {
             get
@@ -55,6 +59,9 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets a collection of mapped (strongly typed) properties and their value handled by the <see cref="KerbalDataObject"/> instance. 
+        /// </summary>
         public ObservableCollection<MappedPropertyViewModel> MappedProperties
         {
             get
@@ -69,15 +76,18 @@ namespace KerbalEdit.ViewModels
 
                 return mappedProperties;
             }
-            
+            /*
             private set
             {
                 mappedProperties = value;
                 OnPropertyChanged("MappedProperties", mappedProperties);
                 IsDirty = true;
-            }
+            }*/
         }
 
+        /// <summary>
+        /// Gets a collection of unmapped (un-typed string dictionary) properties and their value handled by the <see cref="KerbalDataObject"/> instance. 
+        /// </summary>
         public ObservableCollection<UnMappedPropertyViewModel> UnmappedProperties
         {
             get
@@ -101,6 +111,9 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Handles loading of children in lazy load scenarios
+        /// </summary>
         protected override void LoadChildren()
         {
             if (childrenLoaded)
@@ -136,11 +149,11 @@ namespace KerbalEdit.ViewModels
             childrenLoaded = true;
         }
 
-        private IList<string> BuildRegisteredNames(PropertyInfo[] infoArray)
+        private static IList<string> BuildRegisteredNames(PropertyInfo[] infoArray)
         {
             var list = new List<string>();
 
-            // NOTE: We are only recgnonizing names that have had thier JSON Attribute explicitly set
+            // NOTE: We are only pulling  names that have had their JSON Attribute explicitly set
             for (var i = 0; i < infoArray.Count(); i++)
             {
                 var propInfo = infoArray[i];

@@ -6,23 +6,21 @@
 
 namespace KerbalEdit.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Linq;
-    using System.Text;
-    using System.Windows.Input;
-    using KerbalData;
     using KerbalData.Models;
 
     /// <summary>
-    /// TODO: Class Summary
+    /// Model class for the Change Orbit dialog box
     /// </summary>
     public class ChangeOrbitDialogViewModel
     {
-        private KerbalDataObjectViewModel orbitVm;
+        private readonly KerbalDataObjectViewModel orbitVm;
 
-        public ChangeOrbitDialogViewModel(TreeViewItemViewModel vm)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChangeOrbitDialogViewModel" /> class.
+        /// </summary>
+        /// <param name="vm">View model instance of type <see cref="KerbalDataObjectViewModel"/></param>
+        public ChangeOrbitDialogViewModel(INotifyPropertyChanged vm)
         {
             orbitVm = vm as KerbalDataObjectViewModel;
 
@@ -34,6 +32,9 @@ namespace KerbalEdit.ViewModels
             ((Orbit)orbitVm.Object).PropertyChanged += ChangeOrbitDialogViewModel_PropertyChanged;
         }
 
+        /// <summary>
+        /// Gets the <see cref="Orbit"/> instance handled by this view model
+        /// </summary>
         public Orbit Orbit
         {
             get

@@ -6,17 +6,13 @@
 
 namespace KerbalEdit.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Linq;
-    using System.Text;
     using System.Windows.Input;
 
     using KerbalData;
 
     /// <summary>
-    /// TODO: Class Summary
+    /// Model for the SaveAs dialog
     /// </summary>
     public class SaveAsDialogViewModel : INotifyPropertyChanged
     {
@@ -28,6 +24,7 @@ namespace KerbalEdit.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="SaveAsDialogViewModel" /> class.
         /// </summary>	
+        /// <param name="storable"><see cref="IStorable"/> instance to save</param>
         public SaveAsDialogViewModel(IStorable storable)
         {
             this.storable = storable;
@@ -40,6 +37,9 @@ namespace KerbalEdit.ViewModels
                 });
         }
 
+        /// <summary>
+        /// Gets or sets the name to use when saving
+        /// </summary>
         public string Name
         {
             get
@@ -54,6 +54,9 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the save process has completed
+        /// </summary>
         public bool SaveComplete
         {
             get
@@ -68,8 +71,14 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the command to save the provided <see cref="IStorable"/> instance
+        /// </summary>
         public ICommand SaveStorableCommand { get; set; }
 
+        /// <summary>
+        /// Event hook to receive property change events
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string propertyName)

@@ -7,18 +7,14 @@
 namespace KerbalEdit.ViewModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-    using System.Reflection;
-    using System.Text;
     using System.Windows.Input;
 
     using KerbalData;
-    using KerbalData.Serialization;
 
     /// <summary>
-    /// TODO: Class Summary
+    /// Model class to support data export.
     /// </summary>
     public class ExportDataDialogViewModel : INotifyPropertyChanged
     {
@@ -29,8 +25,10 @@ namespace KerbalEdit.ViewModels
         private bool exportComplete;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SaveAsDialogViewModel" /> class.
+        /// Initializes a new instance of the <see cref="ExportDataDialogViewModel" /> class.
         /// </summary>	
+        /// <param name="storable"><see cref="IStorable"/> instance to copy and export</param>
+        /// <param name="registry">configured <see cref="ProcessorRegistry"/> instance used for serialization during export.</param>
         public ExportDataDialogViewModel(IStorable storable, ProcessorRegistry registry)
         {
             this.storable = storable;
@@ -43,11 +41,11 @@ namespace KerbalEdit.ViewModels
                     // that should be reviewed for re-factoring on either the App or the API
                     var regType = registry.GetType();
                     var createMethod =
-                        regType.GetMethods().Where(m => m.Name == "Create").FirstOrDefault().MakeGenericMethod(new Type[] { storable.GetType() });
+                        regType.GetMethods().FirstOrDefault(m => m.Name == "Create").MakeGenericMethod(new Type[] { storable.GetType() });
 
-                    var saveMethod = 
-                        typeof(KspData).GetMethods().Where(m => m.Name == "SaveFile").Where(m => m.GetParameters()[2].ParameterType != typeof(string))
-                        .FirstOrDefault().MakeGenericMethod(new Type[] { storable.GetType() });
+                    var saveMethod =
+                        typeof(KspData).GetMethods().Where(m => m.Name == "SaveFile").FirstOrDefault(m => m.GetParameters()[2].ParameterType != typeof(string))
+                        .MakeGenericMethod(new Type[] { storable.GetType() });
 
                     saveMethod.Invoke(null, new object[] { path, storable, createMethod.Invoke(registry, null) });
  
@@ -55,6 +53,9 @@ namespace KerbalEdit.ViewModels
                 });
         }
 
+        /// <summary>
+        /// Gets or sets the path to save the data to
+        /// </summary>
         public string Path
         {
             get
@@ -69,6 +70,9 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the export process has completed. 
+        /// </summary>
         public bool ExportComplete
         {
             get
@@ -83,8 +87,14 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Command binding used for execution of the export process resulting in the selected data to be saved as a file to the desired path. 
+        /// </summary>
         public ICommand ExportStorableCommand { get; set; }
 
+        /// <summary>
+        /// Event handler used for signaling property value changes
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string propertyName)

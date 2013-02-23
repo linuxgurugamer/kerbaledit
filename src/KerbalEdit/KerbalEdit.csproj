@@ -66,7 +66,6 @@
     <Compile Include="ViewModels\BaseWindowViewModel.cs" />
     <Compile Include="ViewModels\ChangeOrbitDialogViewModel.cs" />
     <Compile Include="ViewModels\ExportDataDialogViewModel.cs" />
-    <Compile Include="ViewModels\ICommandViewModel.cs" />
     <Compile Include="ViewModels\ImportDataDialogViewModel.cs" />
     <Compile Include="ViewModels\IStorableObjectsViewModel.cs" />
     <Compile Include="ViewModels\ISelectedViewModel.cs" />
@@ -81,7 +80,6 @@
     <Compile Include="ViewModels\StorableObjectViewModel.cs" />
     <Compile Include="ViewModels\TreeViewItemViewModel.cs" />
     <Compile Include="ViewModels\UnMappedPropertyViewModel.cs" />
-    <Compile Include="ViewModels\Commands\BuildContextCommandsDataCommand.cs" />
     <Compile Include="Views\ChangeOrbitDialogView.xaml.cs">
       <DependentUpon>ChangeOrbitDialogView.xaml</DependentUpon>
     </Compile>

@@ -7,30 +7,21 @@
 namespace KerbalEdit.ViewModels
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.ComponentModel;
     using System.Windows.Input;
     using System.Windows.Forms;
-
     using KerbalData;
 
-    using Commands;
-
     /// <summary>
-    /// TODO: Class Summary
+    /// Model to support the top level application window
     /// </summary>
-    public class MainWindowViewModel : BaseWindowViewModel, INotifyPropertyChanged
+    public class MainWindowViewModel : BaseWindowViewModel
     {
-        const string PropNameKerbalData = "Data";
-        const string PropNameInstallPath = "InstallPath";
-        const string PropNameSelectedItem = "SelectedItem";
+        private const string PropNameKerbalData = "Data";
+        private const string PropNameInstallPath = "InstallPath";
 
         private string installPath;
         private KerbalDataViewModel kerbalData;
-        //private TreeViewItemViewModel selectedItem;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
@@ -40,15 +31,24 @@ namespace KerbalEdit.ViewModels
             Init();
         }
 
-        public ICommand OpenKspInstallFolderCommand { get; private set; }
-        public ICommand ShowMenuCommand { get; private set; }
+        /// <summary>
+        /// Gets the command hook that handles collecting folder input information using a folder selector.
+        /// </summary>
+        public ICommand OpenKspInstallFolderCommand
+        {
+            get; private set;
+        }
 
+        /// <summary>
+        /// Gets or sets the data model handling KSP data.
+        /// </summary>
         public KerbalDataViewModel Data
         {
             get
             {
                 return kerbalData;
             }
+
             set
             {
                 if (value != kerbalData)
@@ -59,12 +59,16 @@ namespace KerbalEdit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the install path for KSP data.
+        /// </summary>
         public string InstallPath
         {
             get
             {
                 return installPath;
             }
+
             set
             {
                 if (value != installPath)
@@ -90,14 +94,12 @@ namespace KerbalEdit.ViewModels
                         InstallPath = dlg.SelectedPath;
                     }
                 });
-
-            ShowMenuCommand = new BuildContextCommandsDataCommand();
         }
 
         private void UpdateInstallPath()
         {
             // Temporary Fix for memory leak. While this is expensive we only do it when loading/unloading a new file/install which should happen.
-            // fairly irrigularly
+            // fairly irregularly
             // TODO: refactor to address leak.
             if (Data != null)
             {
