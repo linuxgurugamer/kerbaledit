@@ -1,0 +1,45 @@
+{
+  "WorkItem": {
+    "AffectedComponent": {
+      "Name": "",
+      "DisplayName": ""
+    },
+    "ClosedComment": "",
+    "ClosedDate": "2013-02-18T21:09:52.713-08:00",
+    "CommentCount": 1,
+    "Custom": null,
+    "Description": "Create a generic view that can work with any IKerbalDataObject instance and expose all it's mapped and unmapped properties in a simple to edit Grid interface. ",
+    "LastUpdatedDate": "2017-11-27T17:48:45.763-08:00",
+    "PlannedForRelease": "0.3.0 Alpha (Jeb's Junker)",
+    "ReleaseVisibleToPublic": false,
+    "Priority": {
+      "Name": "Medium",
+      "Severity": 100,
+      "Id": 2
+    },
+    "ProjectName": "kerbaledit",
+    "ReportedDate": "2013-02-12T09:57:28.123-08:00",
+    "Status": {
+      "Name": "Closed",
+      "Id": 4
+    },
+    "ReasonClosed": {
+      "Name": "Unassigned"
+    },
+    "Summary": "Build IKerbalDataObject Editor View",
+    "Type": {
+      "Name": "Task",
+      "Id": 2
+    },
+    "VoteCount": 1,
+    "Id": 3
+  },
+  "FileAttachments": [],
+  "Comments": [
+    {
+      "Message": "Basic editor view in place. Need to add add/remove functionality to unmapped properties window. ",
+      "PostedDate": "2013-02-16T22:21:14.103-08:00",
+      "Id": 90590
+    }
+  ]
+}

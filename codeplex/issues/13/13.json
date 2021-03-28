@@ -1,0 +1,45 @@
+{
+  "WorkItem": {
+    "AffectedComponent": {
+      "Name": "",
+      "DisplayName": ""
+    },
+    "ClosedComment": "",
+    "ClosedDate": null,
+    "CommentCount": 0,
+    "Custom": null,
+    "Description": "i like the app, needs work though.\r\ni am trying to fix assign an action key to a part, but two problems:\r\n\r\n1.  cannot save the action key changes using right click\r\n2.  when editing the action key value, i am seeing escape characters in the edit screen.  looks like something is wrong, see attachment",
+    "LastUpdatedDate": "2014-02-16T02:08:47.593-08:00",
+    "PlannedForRelease": "",
+    "ReleaseVisibleToPublic": false,
+    "Priority": {
+      "Name": "Unassigned",
+      "Severity": 0,
+      "Id": 0
+    },
+    "ProjectName": "kerbaledit",
+    "ReportedDate": "2014-02-16T02:08:47.47-08:00",
+    "Status": {
+      "Name": "Proposed",
+      "Id": 1
+    },
+    "ReasonClosed": {
+      "Name": "Unassigned"
+    },
+    "Summary": "like the app",
+    "Type": {
+      "Name": "Unassigned",
+      "Id": 5
+    },
+    "VoteCount": 1,
+    "Id": 13
+  },
+  "FileAttachments": [
+    {
+      "FileId": 797840,
+      "FileName": "Capture.JPG",
+      "DownloadUrl": ".\\797840"
+    }
+  ],
+  "Comments": []
+}

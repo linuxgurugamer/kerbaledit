@@ -1,0 +1,39 @@
+{
+  "WorkItem": {
+    "AffectedComponent": {
+      "Name": "",
+      "DisplayName": ""
+    },
+    "ClosedComment": "",
+    "ClosedDate": null,
+    "CommentCount": 0,
+    "Custom": null,
+    "Description": "Add ability to export craft as a package including any parts and related mods. Be able to read the same package type in and install any parts/mods that do not conflict. Auto-edit conflicting parts with different configurations and update relevant craft files as needed. ",
+    "LastUpdatedDate": "2017-11-27T17:48:45.763-08:00",
+    "PlannedForRelease": "",
+    "ReleaseVisibleToPublic": false,
+    "Priority": {
+      "Name": "Medium",
+      "Severity": 100,
+      "Id": 2
+    },
+    "ProjectName": "kerbaledit",
+    "ReportedDate": "2013-02-19T07:38:37.967-08:00",
+    "Status": {
+      "Name": "Proposed",
+      "Id": 1
+    },
+    "ReasonClosed": {
+      "Name": "Unassigned"
+    },
+    "Summary": "Full Craft Export Import",
+    "Type": {
+      "Name": "Feature",
+      "Id": 1
+    },
+    "VoteCount": 1,
+    "Id": 7
+  },
+  "FileAttachments": [],
+  "Comments": []
+}

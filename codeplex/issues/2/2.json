@@ -1,0 +1,45 @@
+{
+  "WorkItem": {
+    "AffectedComponent": {
+      "Name": "",
+      "DisplayName": ""
+    },
+    "ClosedComment": "",
+    "ClosedDate": "2013-02-18T21:10:07.747-08:00",
+    "CommentCount": 1,
+    "Custom": null,
+    "Description": "Using example from KSPEdit develop file loading capabilities and UI controls. \r\n\r\nInclude workflow state management for the following scenarios:\r\n\r\n* user makes changes but has not saved\r\n",
+    "LastUpdatedDate": "2017-11-27T17:48:45.763-08:00",
+    "PlannedForRelease": "0.3.0 Alpha (Jeb's Junker)",
+    "ReleaseVisibleToPublic": false,
+    "Priority": {
+      "Name": "Medium",
+      "Severity": 100,
+      "Id": 2
+    },
+    "ProjectName": "kerbaledit",
+    "ReportedDate": "2013-02-12T09:56:37.53-08:00",
+    "Status": {
+      "Name": "Closed",
+      "Id": 4
+    },
+    "ReasonClosed": {
+      "Name": "Unassigned"
+    },
+    "Summary": "Develop File Loader",
+    "Type": {
+      "Name": "Task",
+      "Id": 2
+    },
+    "VoteCount": 1,
+    "Id": 2
+  },
+  "FileAttachments": [],
+  "Comments": [
+    {
+      "Message": "main loader complete. Need workflow for:\n\n* Save\n* Warning on unload/exit if data state changes have not been saved. \n* Single file loading. ",
+      "PostedDate": "2013-02-13T07:31:48.68-08:00",
+      "Id": 89190
+    }
+  ]
+}

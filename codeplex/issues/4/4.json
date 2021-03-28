@@ -1,0 +1,45 @@
+{
+  "WorkItem": {
+    "AffectedComponent": {
+      "Name": "",
+      "DisplayName": ""
+    },
+    "ClosedComment": "",
+    "ClosedDate": "2013-02-18T21:09:42.073-08:00",
+    "CommentCount": 1,
+    "Custom": null,
+    "Description": "Develop appropriate UI controls for processing data using KerbalData helper functions like Refill(). The UI should expose every helper function available to the user in a context appropriate manner. ",
+    "LastUpdatedDate": "2017-11-27T17:48:45.763-08:00",
+    "PlannedForRelease": "0.3.0 Alpha (Jeb's Junker)",
+    "ReleaseVisibleToPublic": false,
+    "Priority": {
+      "Name": "Medium",
+      "Severity": 100,
+      "Id": 2
+    },
+    "ProjectName": "kerbaledit",
+    "ReportedDate": "2013-02-12T09:59:12.707-08:00",
+    "Status": {
+      "Name": "Closed",
+      "Id": 4
+    },
+    "ReasonClosed": {
+      "Name": "Unassigned"
+    },
+    "Summary": "Build UI features for access to API functions",
+    "Type": {
+      "Name": "Task",
+      "Id": 2
+    },
+    "VoteCount": 1,
+    "Id": 4
+  },
+  "FileAttachments": [],
+  "Comments": [
+    {
+      "Message": "Creating right-click menu on tree to access the following features:\r\n\r\n* Save\r\n* Revert [PLACEHOLDER]\r\n* ClearDebris\r\n* FillResources\r\n* ChangeOrbit\r\n\r\nMenu items will appear in a context-correct manner (IE FillResources is only available on nodes that contain resources)",
+      "PostedDate": "2013-02-16T22:23:34.14-08:00",
+      "Id": 90591
+    }
+  ]
+}

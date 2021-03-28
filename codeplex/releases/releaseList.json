@@ -1,0 +1,35 @@
+[
+  {
+    "Id": "0",
+    "Name": "0.4.0 Alpha (Jeb's Junker)",
+    "DevelopmentStatus": "Planning",
+    "Description": "Multi-platform release.",
+    "ReleasedDatge": "0001-01-01T00:00:00",
+    "ModifiedDate": "2013-03-10T14:27:42.947-07:00",
+    "Files": []
+  },
+  {
+    "Id": "1",
+    "Name": "0.3.1 Alpha (Jeb's Junker)",
+    "DevelopmentStatus": "Alpha",
+    "Description": "NOTE: KerbalEdit has been patched to support loading parts for KSP 0.21.x. Please download the patched version for KerbalSpaceProgram 0.21.x installations.\n\n* 0.3.1 Documentation [url:Web|http://manitcor.com/ksp/KerbalEdit/0.3.1Alpha/index.php#] | [url:CHM|http://manitcor.com/ksp/KerbalEdit/0.3.1Alpha/KerbalEdit.Docs.chm]\n\nRelease notes\n----\n* Multiple fixes to single file load and save. To address errors with loading some part.cfgs and certian import/export scenarios\n* Fixed saving for files loaded individually\n* Fixed loading for files loaded individually\n* Added class documentation for developer reference, general code cleanup.\n* Added Documentation Project",
+    "ReleasedDatge": "0001-01-01T00:00:00",
+    "ModifiedDate": "2013-08-05T19:53:22.887-07:00",
+    "Files": [
+      {
+        "Id": "69c1aef4-bd02-4b94-8154-2483f9296b99",
+        "FileName": "KerbalEdit_031_patch021_20130805_000.zip",
+        "Url": "./1/69c1aef4-bd02-4b94-8154-2483f9296b99",
+        "Type": "Application",
+        "UploadDate": "2013-08-05T19:52:15.667-07:00"
+      },
+      {
+        "Id": "dfb5c87b-6fdb-4044-9683-8a7f5b08235b",
+        "FileName": "KerbalEdit_031_20130301_000.zip",
+        "Url": "./1/dfb5c87b-6fdb-4044-9683-8a7f5b08235b",
+        "Type": "Application",
+        "UploadDate": "2013-02-28T22:41:55.863-08:00"
+      }
+    ]
+  }
+]
